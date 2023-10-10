@@ -566,7 +566,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.14847782, y: -1.6908059, z: -1.9912627}
-  m_LocalScale: {x: 10, y: 0.2, z: 10}
+  m_LocalScale: {x: 85.442184, y: 0.2, z: 85.03324}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1820797511}
@@ -800,9 +800,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 879215bbaa96fd949abef7644ecfe14d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  playerVelocity: {x: 0, y: 0, z: 0}
+  speed: 7
+  friction: 1.9
   gravity: -9.8
   jumpHeight: 1
+  airMovement: 0
 --- !u!114 &2121204575
 MonoBehaviour:
   m_ObjectHideFlags: 0
