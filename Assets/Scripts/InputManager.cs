@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,7 +30,12 @@ public class InputManager : MonoBehaviour
 
     void LateUpdate()
     {
-        look.ProcessLook(defaultActions.Look.ReadValue<Vector2>());
+        if (defaultActions.Look.activeControl != null)
+        {
+            int multiplier = defaultActions.Look.activeControl.device.ToString() == "Mouse:/Mouse" ? 1 : 6;
+            look.ProcessLook(defaultActions.Look.ReadValue<Vector2>() * multiplier);
+        }
+
     }
 
     private void OnEnable()
