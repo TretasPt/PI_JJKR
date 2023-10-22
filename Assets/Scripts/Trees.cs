@@ -10,11 +10,10 @@ public class Trees : MonoBehaviour
 
     public GameObject objectToSpawn;
 
-    // public GameObject ObjectParent;
-
     public Vector3 origin = Vector3.zero;
     public float radius = 100;
 
+    public int MAX_TREES = 10000;
 
 
     void Awake()
@@ -32,30 +31,11 @@ public class Trees : MonoBehaviour
         if (Instance != null && Instance != this) Destroy(this);
         else Instance = this;
 
-        int numberOfClusters = GenerateNumberOfTreeCluesters(3);
+        int numberOfClusters = GenerateNumberOfTreeCluesters(5);
 
-        // PlaceTree(0, 0);
-        PlaceTree();
-        // PlaceRandomTree();
-        // PlaceRandomTree();
-        // PlaceRandomTree();
+        // PlaceTree();
+        GenerateTreeClusters(numberOfClusters);
 
-        ////Seems playable up to 20000 trees.
-        // for (int i = 0; i < 10000; i++)
-        // {
-        // PlaceRandomTree();
-        // }
-
-
-        // // Initialise round duration
-        // roundDuration = GenerateRoundDuration(lambda);
-
-        // // Initialise number of crates to spawn
-        // numberOfCratesToSpawn = GenerateRandomNumberOfCrates(n, p);
-
-        // // Display game parameters to the console
-        // Debug.Log($"Round duration: {roundDuration}");
-        // Debug.Log($"Number of crates to spawn: {numberOfCratesToSpawn}");
     }
 
     // Update is called once per frame
@@ -67,32 +47,54 @@ public class Trees : MonoBehaviour
     private int GenerateNumberOfTreeCluesters(int max)
     {
         //TODO Make random
+        Debug.Log("Returning a number of tree clusters." + max);
         return max;
     }
 
-    private void GenerateTreeClusters()
+    private void GenerateTreeClusters(int numberOfClusters)
     //TODO
     {
+        int treesToPlace = MAX_TREES;
 
+        for (int i = numberOfClusters; i > 0; i--)
+        {
+            Debug.Log("Generating tree cluster - " + i);
+
+            GameObject treeCluster = new GameObject("TreeCluster-"+i);
+            treeCluster.transform.parent = transform;
+
+            Debug.Log("Before" + treesToPlace);
+
+
+            int treesPerCircle = treesToPlace / i;
+
+            GenerateTreeCluster(treesPerCircle, treeCluster);
+
+            treesToPlace -= treesPerCircle;
+
+            Debug.Log("After" + treesToPlace);
+
+        }
     }
 
-    private void GenerateTreeCluster()
+    private void GenerateTreeCluster(int numberOfTrees, GameObject treeClusterParent)
     //TODO
     {
-
+        for (int i = 0; i < numberOfTrees; i++)
+        {
+            PlaceRandomTree(treeClusterParent.transform);
+        }
+        Debug.Log("Generating a cluster with " + numberOfTrees + " trees.");
     }
 
-    private void PlaceTree(Vector3 position, Quaternion rotation)
+    private void PlaceTree(Vector3 position, Quaternion rotation, Transform parent)
     {
-        // GameObject Tree = Instantiate(objectToSpawn);
-        // GameObject Tree = Instantiate(objectToSpawn, transform.position, Quaternion.identity);
-        GameObject Tree = Instantiate(objectToSpawn, position, rotation, transform);
+        GameObject Tree = Instantiate(objectToSpawn, position, rotation, parent);
+    }
 
-        // Finds a position in a sphere with a radius of 10 units.
-        // Vector3 randomPosition = origin + Random.insideUnitSphere * radius;
-        // Instantiate(objectToSpawn, randomPosition, Quaternion.identity);
-
-
+     private void PlaceTree(Vector3 position, Quaternion rotation)
+    {
+        PlaceTree(position,rotation,transform);
     }
 
     private void PlaceTree()
@@ -100,17 +102,18 @@ public class Trees : MonoBehaviour
         PlaceTree(transform.position, Quaternion.identity);
     }
 
+    private void PlaceRandomTree(Transform parent)
+    {
+        Vector3 randomPosition = origin + Random.insideUnitSphere * radius;
+        randomPosition.y = 0;
+        PlaceTree(randomPosition, Quaternion.identity, parent);
+    }
+
     private void PlaceRandomTree()
     {
-        // Finds a position in a sphere with a radius of 10 units.
-        // Vector3 rand = origin + Random.onUnitSphere * radius;
-        // rand.y=0;
-        // PlaceTree(rand, Quaternion.identity);
         Vector3 randomPosition = origin + Random.insideUnitSphere * radius;
-        randomPosition.y=0;
+        randomPosition.y = 0;
         PlaceTree(randomPosition, Quaternion.identity);
-
-
     }
 
 }
