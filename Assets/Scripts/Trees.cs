@@ -15,6 +15,8 @@ public class Trees : MonoBehaviour
 
     public int MAX_TREES = 10000;
 
+    public int MAX_TREE_CLUSTERS = 10;
+
 
     void Awake()
     {
@@ -31,7 +33,7 @@ public class Trees : MonoBehaviour
         if (Instance != null && Instance != this) Destroy(this);
         else Instance = this;
 
-        int numberOfClusters = GenerateNumberOfTreeCluesters(5);
+        int numberOfClusters = GenerateNumberOfTreeCluesters(MAX_TREE_CLUSTERS);
 
         // PlaceTree();
         GenerateTreeClusters(numberOfClusters);
@@ -80,9 +82,23 @@ public class Trees : MonoBehaviour
     private void GenerateTreeCluster(int numberOfTrees, GameObject treeClusterParent)
     //TODO
     {
+
+        float x = Random.Range(-100f,100f);
+        float z = Random.Range(-100f,100f);
+        
+        // treeClusterParent.transform.position.Set(x,0,z);
+        treeClusterParent.transform.SetLocalPositionAndRotation(new Vector3(x,0,z),Quaternion.identity);
+
+        Debug.Log(treeClusterParent.transform.position);
+
         for (int i = 0; i < numberOfTrees; i++)
         {
-            PlaceRandomTree(treeClusterParent.transform);
+            // PlaceRandomTree(treeClusterParent.transform);
+            float angle = Random.Range(0,2*Mathf.PI);
+            float radious = Random.Range(20,40);
+
+            PlaceTree(PolarToCartesian(angle,radious)+treeClusterParent.transform.position,Quaternion.identity, treeClusterParent.transform);
+            
         }
         Debug.Log("Generating a cluster with " + numberOfTrees + " trees.");
     }
@@ -104,7 +120,8 @@ public class Trees : MonoBehaviour
 
     private void PlaceRandomTree(Transform parent)
     {
-        Vector3 randomPosition = origin + Random.insideUnitSphere * radius;
+        // Vector3 randomPosition = origin + Random.insideUnitSphere * radius;
+                Vector3 randomPosition = parent.position + Random.insideUnitSphere * radius;
         randomPosition.y = 0;
         PlaceTree(randomPosition, Quaternion.identity, parent);
     }
@@ -114,6 +131,16 @@ public class Trees : MonoBehaviour
         Vector3 randomPosition = origin + Random.insideUnitSphere * radius;
         randomPosition.y = 0;
         PlaceTree(randomPosition, Quaternion.identity);
+    }
+
+    //
+    // Summary:
+    //     Returns the Vector3 position of a tree 
+    //
+    // Parameters:
+    //   f:
+    private Vector3 PolarToCartesian(float angle, float radious){
+        return new Vector3(Mathf.Cos(angle)*radious,0,Mathf.Sin(angle)*radious);
     }
 
 }

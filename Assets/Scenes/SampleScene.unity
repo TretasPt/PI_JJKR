@@ -1068,7 +1068,8 @@ MonoBehaviour:
   objectToSpawn: {fileID: 6400487938566776362, guid: 0743323dae59a1249bc7615a9d67918c, type: 3}
   origin: {x: 0, y: 0, z: 0}
   radius: 50
-  MAX_TREES: 97
+  MAX_TREES: 500
+  MAX_TREE_CLUSTERS: 7
 --- !u!1 &1079430886
 GameObject:
   m_ObjectHideFlags: 0
