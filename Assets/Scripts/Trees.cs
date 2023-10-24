@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Trees : MonoBehaviour
 {
@@ -9,7 +11,9 @@ public class Trees : MonoBehaviour
     public static Trees Instance { get; private set; }
 
 
-    public GameObject objectToSpawn;
+    public GameObject TreePrefab;
+
+    public GameObject BushPrefab;
 
     public Material RedLeafMaterial;
 
@@ -94,7 +98,7 @@ public class Trees : MonoBehaviour
 
         Debug.Log(treeClusterParent.transform.position);
 
-        GameObject centralTree = PlaceTree(treeClusterParent.transform.position, Quaternion.identity, treeClusterParent.transform);
+        GameObject centralTree = PlaceProp(treeClusterParent.transform.position, Quaternion.identity, treeClusterParent.transform);
         // Debug.Log(centralTree.transform.position);
         // centralTree.GetComponent("Sphere").AddComponent();;
         // centralTree.GetComponent<MeshRenderer>().material = RedLeafMaterial;
@@ -107,40 +111,42 @@ public class Trees : MonoBehaviour
             float angle = Random.Range(0,2*Mathf.PI);
             float radious = Random.Range(20,40);
 
-            PlaceTree(PolarToCartesian(angle,radious)+treeClusterParent.transform.position,Quaternion.identity, treeClusterParent.transform);
+            Boolean isTree = Random.Range(0f,1f) > 0.5;
+
+            PlaceProp(PolarToCartesian(angle,radious)+treeClusterParent.transform.position,Quaternion.identity, treeClusterParent.transform, isTree);
             
         }
         Debug.Log("Generating a cluster with " + numberOfTrees + " trees.");
     }
 
-    private GameObject PlaceTree(Vector3 position, Quaternion rotation, Transform parent)
+    private GameObject PlaceProp(Vector3 position, Quaternion rotation, Transform parent, Boolean isTree=true)
     {
-        return Instantiate(objectToSpawn, position, rotation, parent);
+        return Instantiate(isTree?TreePrefab:BushPrefab, position, rotation, parent);
     }
 
-     private GameObject PlaceTree(Vector3 position, Quaternion rotation)
+     private GameObject PlaceProp(Vector3 position, Quaternion rotation, Boolean isTree=true)
     {
-        return PlaceTree(position,rotation,transform);
+        return PlaceProp(position,rotation,transform,isTree);
     }
 
-    private GameObject PlaceTree()
+    private GameObject PlaceProp( Boolean isTree=true)
     {
-        return PlaceTree(transform.position, Quaternion.identity);
+        return PlaceProp(transform.position, Quaternion.identity, isTree);
     }
 
-    private GameObject PlaceRandomTree(Transform parent)
+    private GameObject PlaceRandomProp(Transform parent, Boolean isTree=true)
     {
         // Vector3 randomPosition = origin + Random.insideUnitSphere * radius;
                 Vector3 randomPosition = parent.position + Random.insideUnitSphere * radius;
         randomPosition.y = 0;
-        return PlaceTree(randomPosition, Quaternion.identity, parent);
+        return PlaceProp(randomPosition, Quaternion.identity, parent, isTree);
     }
 
-    private GameObject PlaceRandomTree()
+    private GameObject PlaceRandomProp( Boolean isTree=true)
     {
         Vector3 randomPosition = origin + Random.insideUnitSphere * radius;
         randomPosition.y = 0;
-        return PlaceTree(randomPosition, Quaternion.identity);
+        return PlaceProp(randomPosition, Quaternion.identity, isTree);
     }
 
     //

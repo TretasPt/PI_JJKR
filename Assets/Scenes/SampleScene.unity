@@ -1065,12 +1065,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a12af2132b12b148a4c45d21b0da5bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectToSpawn: {fileID: 6400487938566776362, guid: 0743323dae59a1249bc7615a9d67918c, type: 3}
+  TreePrefab: {fileID: 6400487938566776362, guid: 0743323dae59a1249bc7615a9d67918c, type: 3}
+  BushPrefab: {fileID: 337021264043671488, guid: b4a17ff8c8f6c174a844e91ff63118ef, type: 3}
   RedLeafMaterial: {fileID: 2100000, guid: 1f41f85e7c9b5a2458ce30fa31d561a0, type: 2}
   origin: {x: 0, y: 0, z: 0}
   radius: 50
-  MAX_TREES: 500
-  MAX_TREE_CLUSTERS: 7
+  MAX_TREES: 2500
+  MAX_TREE_CLUSTERS: 5
 --- !u!1 &1079430886
 GameObject:
   m_ObjectHideFlags: 0
