@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Trees : MonoBehaviour
@@ -9,6 +10,8 @@ public class Trees : MonoBehaviour
 
 
     public GameObject objectToSpawn;
+
+    public Material RedLeafMaterial;
 
     public Vector3 origin = Vector3.zero;
     public float radius = 100;
@@ -91,7 +94,14 @@ public class Trees : MonoBehaviour
 
         Debug.Log(treeClusterParent.transform.position);
 
-        for (int i = 0; i < numberOfTrees; i++)
+        GameObject centralTree = PlaceTree(treeClusterParent.transform.position, Quaternion.identity, treeClusterParent.transform);
+        // Debug.Log(centralTree.transform.position);
+        // centralTree.GetComponent("Sphere").AddComponent();;
+        // centralTree.GetComponent<MeshRenderer>().material = RedLeafMaterial;
+        // centralTree.GetComponent("Sphere").GetComponent<MeshRenderer>().material = RedLeafMaterial;
+        centralTree.transform.Find("Sphere").GetComponent<MeshRenderer>().material = RedLeafMaterial;
+
+        for (int i = 1; i < numberOfTrees; i++)
         {
             // PlaceRandomTree(treeClusterParent.transform);
             float angle = Random.Range(0,2*Mathf.PI);
@@ -103,34 +113,34 @@ public class Trees : MonoBehaviour
         Debug.Log("Generating a cluster with " + numberOfTrees + " trees.");
     }
 
-    private void PlaceTree(Vector3 position, Quaternion rotation, Transform parent)
+    private GameObject PlaceTree(Vector3 position, Quaternion rotation, Transform parent)
     {
-        GameObject Tree = Instantiate(objectToSpawn, position, rotation, parent);
+        return Instantiate(objectToSpawn, position, rotation, parent);
     }
 
-     private void PlaceTree(Vector3 position, Quaternion rotation)
+     private GameObject PlaceTree(Vector3 position, Quaternion rotation)
     {
-        PlaceTree(position,rotation,transform);
+        return PlaceTree(position,rotation,transform);
     }
 
-    private void PlaceTree()
+    private GameObject PlaceTree()
     {
-        PlaceTree(transform.position, Quaternion.identity);
+        return PlaceTree(transform.position, Quaternion.identity);
     }
 
-    private void PlaceRandomTree(Transform parent)
+    private GameObject PlaceRandomTree(Transform parent)
     {
         // Vector3 randomPosition = origin + Random.insideUnitSphere * radius;
                 Vector3 randomPosition = parent.position + Random.insideUnitSphere * radius;
         randomPosition.y = 0;
-        PlaceTree(randomPosition, Quaternion.identity, parent);
+        return PlaceTree(randomPosition, Quaternion.identity, parent);
     }
 
-    private void PlaceRandomTree()
+    private GameObject PlaceRandomTree()
     {
         Vector3 randomPosition = origin + Random.insideUnitSphere * radius;
         randomPosition.y = 0;
-        PlaceTree(randomPosition, Quaternion.identity);
+        return PlaceTree(randomPosition, Quaternion.identity);
     }
 
     //
