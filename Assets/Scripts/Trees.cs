@@ -69,7 +69,7 @@ public class Trees : MonoBehaviour
         {
             Debug.Log("Generating tree cluster - " + i);
 
-            GameObject treeCluster = new GameObject("TreeCluster-"+i);
+            GameObject treeCluster = new GameObject("TreeCluster-" + i);
             treeCluster.transform.parent = transform;
 
             Debug.Log("Before" + treesToPlace);
@@ -90,11 +90,11 @@ public class Trees : MonoBehaviour
     //TODO
     {
 
-        float x = Random.Range(-100f,100f);
-        float z = Random.Range(-100f,100f);
-        
+        float x = Random.Range(-100f, 100f);
+        float z = Random.Range(-100f, 100f);
+
         // treeClusterParent.transform.position.Set(x,0,z);
-        treeClusterParent.transform.SetLocalPositionAndRotation(new Vector3(x,0,z),Quaternion.identity);
+        treeClusterParent.transform.SetLocalPositionAndRotation(new Vector3(x, 0, z), Quaternion.identity);
 
         Debug.Log(treeClusterParent.transform.position);
 
@@ -108,41 +108,49 @@ public class Trees : MonoBehaviour
         for (int i = 1; i < numberOfTrees; i++)
         {
             // PlaceRandomTree(treeClusterParent.transform);
-            float angle = Random.Range(0,2*Mathf.PI);
-            float radious = Random.Range(20,40);
+            float angle = Random.Range(0, 2 * Mathf.PI);
+            float radious = Random.Range(20, 40);
 
-            Boolean isTree = Random.Range(0f,1f) > 0.5;
+            bool isTree = Random.Range(0f, 1f) > 0.5;
 
-            PlaceProp(PolarToCartesian(angle,radious)+treeClusterParent.transform.position,Quaternion.identity, treeClusterParent.transform, isTree);
-            
+            PlaceProp(PolarToCartesian(angle, radious) + treeClusterParent.transform.position, Quaternion.identity, treeClusterParent.transform, isTree);
+
         }
         Debug.Log("Generating a cluster with " + numberOfTrees + " trees.");
     }
 
-    private GameObject PlaceProp(Vector3 position, Quaternion rotation, Transform parent, Boolean isTree=true)
+    private GameObject PlaceProp(Vector3 position, Quaternion rotation, Transform parent, bool isTree = true)
     {
-        return Instantiate(isTree?TreePrefab:BushPrefab, position, rotation, parent);
+        // return Instantiate(isTree ? TreePrefab : BushPrefab, position, rotation, parent);
+        if (isTree)
+        {
+            return GenerateTree(position, rotation, parent);
+        }
+        else
+        {
+            return GenerateBush(position, rotation, parent);
+        }
     }
 
-     private GameObject PlaceProp(Vector3 position, Quaternion rotation, Boolean isTree=true)
+    private GameObject PlaceProp(Vector3 position, Quaternion rotation, bool isTree = true)
     {
-        return PlaceProp(position,rotation,transform,isTree);
+        return PlaceProp(position, rotation, transform, isTree);
     }
 
-    private GameObject PlaceProp( Boolean isTree=true)
+    private GameObject PlaceProp(bool isTree = true)
     {
         return PlaceProp(transform.position, Quaternion.identity, isTree);
     }
 
-    private GameObject PlaceRandomProp(Transform parent, Boolean isTree=true)
+    private GameObject PlaceRandomProp(Transform parent, bool isTree = true)
     {
         // Vector3 randomPosition = origin + Random.insideUnitSphere * radius;
-                Vector3 randomPosition = parent.position + Random.insideUnitSphere * radius;
+        Vector3 randomPosition = parent.position + Random.insideUnitSphere * radius;
         randomPosition.y = 0;
         return PlaceProp(randomPosition, Quaternion.identity, parent, isTree);
     }
 
-    private GameObject PlaceRandomProp( Boolean isTree=true)
+    private GameObject PlaceRandomProp(bool isTree = true)
     {
         Vector3 randomPosition = origin + Random.insideUnitSphere * radius;
         randomPosition.y = 0;
@@ -155,8 +163,23 @@ public class Trees : MonoBehaviour
     //
     // Parameters:
     //   f:
-    private Vector3 PolarToCartesian(float angle, float radious){
-        return new Vector3(Mathf.Cos(angle)*radious,0,Mathf.Sin(angle)*radious);
+    private Vector3 PolarToCartesian(float angle, float radious)
+    {
+        return new Vector3(Mathf.Cos(angle) * radious, 0, Mathf.Sin(angle) * radious);
+    }
+
+    private GameObject GenerateTree(Vector3 position, Quaternion rotation, Transform parent, float height = 1, float width = 1)
+    {
+        return Instantiate(TreePrefab, position, rotation, parent);
+
+    }
+
+    private GameObject GenerateBush(Vector3 position, Quaternion rotation, Transform parent, float height = 1, float width = 1)
+    {
+        GameObject a =  Instantiate(BushPrefab, position, rotation, parent);
+
+        return a;
+
     }
 
 }
