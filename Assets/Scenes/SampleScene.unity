@@ -1071,7 +1071,9 @@ MonoBehaviour:
   origin: {x: 0, y: 0, z: 0}
   radius: 50
   MAX_TREES: 2500
-  MAX_TREE_CLUSTERS: 5
+  MIN_TREE_CLUSTERS: 10
+  MAX_TREE_CLUSTERS: 10
+  TREE_RATIO: 0.9
 --- !u!1 &1079430886
 GameObject:
   m_ObjectHideFlags: 0
