@@ -38,8 +38,6 @@ public class Trees : MonoBehaviour
     /// </value>
     public Vector3 origin = Vector3.zero;
 
-    //TODO Remove
-    public float radius = 100;
 
     /// <value>
     /// Maximum amount of props to be generated.
@@ -147,48 +145,6 @@ public class Trees : MonoBehaviour
         GenerateTree(origin, Quaternion.identity, treeClusterParent.transform, 2, 3, RedLeafMaterial);
 
 
-        //         int treesToPlace = numberOfTrees;
-
-        // int aaaa = 10000;
-        // while (treesToPlace > 0)
-        // {
-
-        //     // int lastTree = (int)(treesToPlace * treeRatio);
-
-        //     for (int i = 1; i < treesToPlace; i++)
-        //     {
-        //         float angle = Random.Range(0, 2 * Mathf.PI);
-        //         float radious = Random.Range(20, 40);
-
-        //         if(PlaceProp(PolarToCartesian(angle, radious), Quaternion.identity, treeClusterParent.transform, false)!=null){
-        //             Debug.Log("Placed a tree!");
-        //             treesToPlace--;
-        //         }
-
-        //     }
-        //     if(aaaa--<0){
-        //         Debug.Log("AAAAAAAAAAAAAAAAAA");
-        //         break;
-        //     }
-        //     // treesToPlace--;
-        // }
-
-        // int placedTrees =0;
-        // while(placedTrees<=numberOfTrees){
-        //     for(int i = 0 ; i != numberOfTrees-placedTrees;i++){
-        //         placedTrees++;
-        //     }
-        // }
-
-        // int placedTrees = 0;
-        // while (placedTrees < numberOfTrees)
-        // {
-        //     int placeThisCicle = numberOfTrees - placedTrees;
-        //     for (int i = 0; i != placeThisCicle; i++)
-        //     {
-        //         placedTrees++;
-        //     }
-        // }
         int placedTrees = 0;
         while (placedTrees < numberOfTrees)
         {
