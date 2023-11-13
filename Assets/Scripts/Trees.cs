@@ -104,10 +104,9 @@ public class Trees : MonoBehaviour
     }
 
     /// <summary>
-    /// Generates *numberOfClusters* forest clusters.
-    /// (<c>numberOfClusters</c>).
+    /// Generates <c>numberOfClusters</c> forest clusters.
     /// </summary>
-    /// <param name="numberOfClusters"></param>
+    /// <param name="numberOfClusters">Amount of forest clusters to be generated.</param>
     private void GenerateForestClusters(int numberOfClusters)
     //TODO
     {
@@ -131,6 +130,12 @@ public class Trees : MonoBehaviour
         }
     }
 
+/// <summary>
+/// Generate a forest cluster composed of a central tree and <c>numberOfTrees</c> trees and bushes around it.
+/// </summary>
+/// <param name="numberOfTrees">Amount of forest props to generate(Trees and Bushes).</param>
+/// <param name="treeClusterParent">Parent "forest".</param>
+/// <param name="treeRatio">It generates <c>treeRatio</c> trees and 1-<c>treeRatio</c> bushes.</param>
     private void GenerateForestCluster(int numberOfTrees, GameObject treeClusterParent, float treeRatio = 0.7f)
     //TODO
     {
@@ -145,7 +150,7 @@ public class Trees : MonoBehaviour
         GenerateTree(origin, Quaternion.identity, treeClusterParent.transform, 2, 3, RedLeafMaterial);
 
 
-        int placedTrees = 0;
+        int placedTrees = 1;
         while (placedTrees < numberOfTrees)
         {
             int placeThisCicle = numberOfTrees - placedTrees;
@@ -156,21 +161,24 @@ public class Trees : MonoBehaviour
                 float angle = Random.Range(0, 2 * Mathf.PI);
                 float radious = Random.Range(20, 40);
 
-                if (PlaceProp(PolarToCartesian(angle, radious), Quaternion.identity, treeClusterParent.transform, i<lastTree) != null)
+                if (PlaceProp(PolarToCartesian(angle, radious), Quaternion.identity, treeClusterParent.transform, i < lastTree) != null)
                 {
-                    // Debug.Log("Placed a tree!");
-                    // treesToPlace--;
                     placedTrees++;
                 }
 
             }
         }
-        Debug.Log("Placed all trees.");
 
-
-        Debug.Log("Generating a cluster with " + numberOfTrees + " trees.");
     }
 
+    /// <summary>
+    /// Generates a new tree or bush.
+    /// </summary>
+    /// <param name="position">Relative position to the parentCluster center.</param>
+    /// <param name="rotation">Tree orientation. May be used to set an inclination.</param>
+    /// <param name="parent">Forest cluster object. The parent of this Tree.</param>
+    /// <param name="isTree">True generates a tree, false generates a bush.</param>
+    /// <returns>The generated object or null if it fails.</returns>
     private GameObject PlaceProp(Vector3 position, Quaternion rotation, Transform parent, bool isTree = true)
     {
         if (isTree)
@@ -203,7 +211,7 @@ public class Trees : MonoBehaviour
     /// <param name="parentCluster">Forest cluster object. The parent of this Tree</param>
     /// <param name="height">Tree height multiplier.</param>
     /// <param name="width">Tree width multiplier.</param>
-    /// <returns>A Tree GameObject.</returns>
+    /// <returns>A Tree GameObject or null if it fails.</returns>
     private GameObject GenerateTree(Vector3 position, Quaternion rotation, Transform parentCluster, float height = 1, float width = 1, Material leafMaterialOverride = null)
     {
 
@@ -211,9 +219,8 @@ public class Trees : MonoBehaviour
 
         foreach (var collider in Physics.OverlapCapsule(position, position + new Vector3(0, 10, 0), 1))
         {
-            if (collider.gameObject.tag == "Tree")
+            if (collider.gameObject.CompareTag("Tree"))
             {
-                Debug.Log("Skipped one.");
                 return null;
             }
         }
@@ -223,11 +230,6 @@ public class Trees : MonoBehaviour
 
         Vector3 scale = new Vector3(width, height, width);
         tree.transform.localScale = Vector3.Scale(scale, tree.transform.localScale);
-
-        // if(Physics.CheckCapsule(position,position+new Vector3(0,10,0),5)){
-        //     Debug.Log("Bati.");
-        //     // return null;
-        // }
 
         if (leafMaterialOverride)
         {
