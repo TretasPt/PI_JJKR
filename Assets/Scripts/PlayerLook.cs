@@ -20,8 +20,8 @@ public class PlayerLook : MonoBehaviour
         yRotation = Mathf.Clamp(yRotation, -80f, 80f);
 
         cam.transform.localRotation = Quaternion.Euler(yRotation, 0, 0);
-
-        transform.Rotate(Vector3.up * (mouseX * Time.deltaTime) * xSensitivity);
+    
+        transform.Rotate(Vector3.up * mouseX * Time.deltaTime * xSensitivity);
 
     }
 }

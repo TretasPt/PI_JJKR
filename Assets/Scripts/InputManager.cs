@@ -21,7 +21,7 @@ public class InputManager : MonoBehaviour
         defaultActions.Jump.performed += ctx => motor.Jump();
     }
 
-    // Update is called once per frame
+    // Update is called once per frameES
     void FixedUpdate()
     {
         motor.ProcessMove(defaultActions.Movement.ReadValue<Vector2>());
