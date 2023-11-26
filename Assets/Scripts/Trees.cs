@@ -38,25 +38,25 @@ public class Trees : MonoBehaviour
     /// (0,0,0)
     /// Origin of the map.
     /// </value>
-    public Vector3 origin = Vector3.zero;
+    public static readonly Vector3 origin = Vector3.zero;
 
 
     /// <value>
     /// Maximum amount of props to be generated.
     /// </value>
-    public int MAX_TREES = 10000;
+    public int MAX_TREES = 5000;//Default value. Likely overwriden in Inspector.
 
     /// <value>
     /// Minimum amount of environment clusters to generate.
     /// </value>
-    public int MIN_TREE_CLUSTERS = 10;
+    public int MIN_TREE_CLUSTERS = 100;//Default value. Likely overwriden in Inspector.
 
     /// <value>
     /// Maximum amount of environment clusters to generate.
     /// </value>
-    public int MAX_TREE_CLUSTERS = 10;
+    public int MAX_TREE_CLUSTERS = 100;//Default value. Likely overwriden in Inspector.
 
-    public float TREE_RATIO = 0.7f;
+    public float TREE_RATIO = 0.7f;//Default value. Likely overwriden in Inspector.
 
 
 
@@ -66,20 +66,35 @@ public class Trees : MonoBehaviour
     {
         Debug.Log("Awake.");
 
-        if (Instance != null && Instance != this) Destroy(this);
-        else Instance = this;
+        if (Instance != null && Instance != this)
+        {
+            if (true)
+            {
+                Destroy(this);
+            }
+            else
+            {
+                //EXPERIMENTAL.
+                Destroy(Instance);
+                Instance = this;
+                //Would have to remove all the trees and rerun Start().
+            }
 
-        int numberOfClusters = GenerateNumberOfForestCluesters(MIN_TREE_CLUSTERS, MAX_TREE_CLUSTERS);
-
-        // PlaceTree();
-        GenerateForestClusters(numberOfClusters);
+        }
+        else
+        {
+            Instance = this;
+        }
 
     }
 
-    // Start is called before the first frame update
+    // Start is called before the first frame update 
     void Start()
     {
         Debug.Log("Start.");
+
+        int numberOfClusters = GenerateNumberOfForestCluesters(MIN_TREE_CLUSTERS, MAX_TREE_CLUSTERS);
+        GenerateForestClusters(numberOfClusters);
     }
 
     // Update is called once per frame
@@ -118,6 +133,7 @@ public class Trees : MonoBehaviour
 
             GameObject treeCluster = new GameObject("TreeCluster-" + i);
             treeCluster.transform.parent = transform;
+            // Debug.Log("Generated Tree cluster - " + i);
 
 
 
@@ -139,18 +155,14 @@ public class Trees : MonoBehaviour
     /// <param name="treeRatio">It generates <c>treeRatio</c> trees and 1-<c>treeRatio</c> bushes.</param>
     private void GenerateForestCluster(int numberOfTrees, GameObject treeClusterParent, float treeRatio = 0.7f)
     {
+        // positionCluster(treeClusterParent);//May be repositioned.
 
-        //TODO Make random - use uniform.
-        float x = Random.Range(-Floor.transform.localScale.x / 2, Floor.transform.localScale.x / 2);
-        //TODO Make random - use uniform.
-        float z = Random.Range(-Floor.transform.localScale.z / 2, Floor.transform.localScale.z / 2);
-
-        treeClusterParent.transform.SetLocalPositionAndRotation(new Vector3(x, 0, z), Quaternion.identity);
-
-        GameObject centralTree = GenerateTree(origin, Quaternion.identity, treeClusterParent.transform, 2, 3, RedLeafMaterial);
+        // GameObject centralTree = GenerateTree(origin, Quaternion.identity, treeClusterParent.transform, 2, 3, RedLeafMaterial);
+        GameObject centralTree = placeMainTree(treeClusterParent);
 
         centralTree.name = "CentralTree";
 
+        int generation = 0;
         int placedTrees = 1;
         while (placedTrees < numberOfTrees)
         {
@@ -163,14 +175,28 @@ public class Trees : MonoBehaviour
                 //TODO Make random - use normal.
                 float radious = Random.Range(20, 40);
 
-                if (PlaceProp(PolarToCartesian(angle, radious), Quaternion.identity, treeClusterParent.transform, i < lastTree) != null)
+                GameObject currentObject = PlaceProp(PolarToCartesian(angle, radious), Quaternion.identity, treeClusterParent.transform, i < lastTree);
+
+                if (currentObject != null)
                 {
                     placedTrees++;
+                    currentObject.name += " - gen " + generation + " - " + i;
                 }
 
             }
+            generation++;
         }
 
+    }
+
+    private void positionCluster(GameObject treeClusterParent)
+    {
+        //TODO Make random - use uniform.
+        float x = Random.Range(-Floor.transform.localScale.x / 2, Floor.transform.localScale.x / 2);
+        //TODO Make random - use uniform.
+        float z = Random.Range(-Floor.transform.localScale.z / 2, Floor.transform.localScale.z / 2);
+
+        treeClusterParent.transform.SetLocalPositionAndRotation(new Vector3(x, 0, z), Quaternion.identity);
     }
 
     /// <summary>
@@ -214,12 +240,12 @@ public class Trees : MonoBehaviour
     /// <param name="height">Tree height multiplier.</param>
     /// <param name="width">Tree width multiplier.</param>
     /// <returns>A Tree GameObject or null if it fails.</returns>
-    private GameObject GenerateTree(Vector3 position, Quaternion rotation, Transform parentCluster, float height = 1, float width = 1, Material leafMaterialOverride = null)
+    private GameObject GenerateTree(Vector3 position, Quaternion rotation, Transform parentCluster, float height = 1, float width = 1, Material leafMaterialOverride = null, Boolean allowOutOfBounds = false)
     {
 
         position += parentCluster.position;
 
-        if (!isInsideMap(position))
+        if (!allowOutOfBounds && !isInsideMap(position))
             return null;
 
 
@@ -233,9 +259,12 @@ public class Trees : MonoBehaviour
 
         GameObject tree = Instantiate(TreePrefab, position, rotation, parentCluster);
 
+        tree.name = "Tree";
 
         Vector3 scale = new Vector3(width, height, width);
         tree.transform.localScale = Vector3.Scale(scale, tree.transform.localScale);
+
+
 
         if (leafMaterialOverride)
         {
@@ -256,18 +285,18 @@ public class Trees : MonoBehaviour
     /// <param name="height">Bush height multiplier.</param>
     /// <param name="width">Bush width multiplier.</param>
     /// <returns>A Bush GameObject.</returns>
-    private GameObject GenerateBush(Vector3 position, Quaternion rotation, Transform parentCluster, float height = 1, float width = 1, Material leafMaterialOverride = null)
+    private GameObject GenerateBush(Vector3 position, Quaternion rotation, Transform parentCluster, float height = 1, float width = 1, Material leafMaterialOverride = null, Boolean allowOutOfBounds = false)
     {
 
         position += parentCluster.position;
 
 
-        if (!isInsideMap(position))
+        if (!allowOutOfBounds && !isInsideMap(position))
             return null;
 
         GameObject bush = Instantiate(BushPrefab, position, rotation, parentCluster);
 
-        // bush.tag = "Bush";
+        bush.name = "Bush";
 
         Vector3 scale = new Vector3(width, height, width);
         bush.transform.localScale = Vector3.Scale(scale, bush.transform.localScale);
@@ -288,7 +317,28 @@ public class Trees : MonoBehaviour
         return position.x < floorTransform.x / 2 && position.z < floorTransform.z / 2 && position.x > -floorTransform.x / 2 && position.z > -floorTransform.z / 2;
     }
 
+    private GameObject placeMainTree(GameObject treeClusterParent)
+    {
+        int maintTreeWidthMultiplier = 3;
+        int maintTreeHeightMultiplier = 2;
 
+        positionCluster(treeClusterParent);
+
+        GameObject generatedTree = null;
+        while (generatedTree == null)
+        {
+            foreach (var collider in Physics.OverlapCapsule(treeClusterParent.transform.position, treeClusterParent.transform.position + new Vector3(0, maintTreeHeightMultiplier, 0), maintTreeWidthMultiplier))
+            {
+                if (collider.gameObject.CompareTag("Tree"))
+                {
+                    positionCluster(treeClusterParent);
+                    break;
+                }
+            }
+            generatedTree = GenerateTree(origin, Quaternion.identity, treeClusterParent.transform, maintTreeHeightMultiplier, maintTreeWidthMultiplier, RedLeafMaterial);
+        }
+        return generatedTree;
+    }
 }
 
 
