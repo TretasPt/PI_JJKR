@@ -7,7 +7,9 @@ using Random = UnityEngine.Random;
 
 /// <summary>
 /// Singleton class <c>Trees</c> represents the forest and it's generation.
+/// <para>
 /// The forest is comprised of clusters of Trees and Bushes.
+/// </para>
 /// </summary>
 public class Trees : MonoBehaviour
 {
@@ -17,6 +19,12 @@ public class Trees : MonoBehaviour
     /// </value>
     public static Trees Instance { get; private set; }
 
+    /// <value>
+    /// Object where to spawn the props at.
+    /// <para>
+    /// Only it's dimentions are used.
+    /// </para>
+    /// </value>
     public GameObject Floor;
 
     /// <value>
@@ -43,43 +51,60 @@ public class Trees : MonoBehaviour
 
     /// <value>
     /// Maximum amount of props to be generated.
+    /// 
+    /// <para>
+    /// This prop may be either a Tree or a Bush prop.
+    /// </para>
+    /// <para>
+    /// Default value. Likely overwriden in Inspector.
+    /// </para>
     /// </value>
-    public int MAX_TREES = 5000;//Default value. Likely overwriden in Inspector.
+    public int MAX_PROPS = 5000;
 
     /// <value>
     /// Minimum amount of environment clusters to generate.
+    /// <para>
+    /// Default value. Likely overwriden in Inspector.
+    /// </para>
     /// </value>
-    public int MIN_TREE_CLUSTERS = 100;//Default value. Likely overwriden in Inspector.
+    public int MIN_CLUSTERS = 100;
 
     /// <value>
     /// Maximum amount of environment clusters to generate.
+    /// <para>
+    /// Default value. Likely overwriden in Inspector.
+    /// </para>
     /// </value>
-    public int MAX_TREE_CLUSTERS = 100;//Default value. Likely overwriden in Inspector.
+    public int MAX_CLUSTERS = 100;
 
-    public float TREE_RATIO = 0.7f;//Default value. Likely overwriden in Inspector.
+    /// <summary>
+    /// Ratio of Trees to Bushes.
+    /// <para>
+    /// Must be between 0(no trees) and 1(only trees).
+    /// </para>
+    /// <para>
+    /// Default value. Likely overwriden in Inspector.
+    /// </para>
+    /// </summary>
+    public float TREE_RATIO = 0.7f;
 
 
 
 
 
+    /// <summary>
+    /// First function to be called.
+    /// <para>
+    /// Ensures there is a single instance of the script.
+    /// </para>
+    /// </summary>
     void Awake()
     {
         Debug.Log("Awake.");
 
         if (Instance != null && Instance != this)
         {
-            if (true)
-            {
-                Destroy(this);
-            }
-            else
-            {
-                //EXPERIMENTAL.
-                Destroy(Instance);
-                Instance = this;
-                //Would have to remove all the trees and rerun Start().
-            }
-
+            Destroy(this);
         }
         else
         {
@@ -88,16 +113,26 @@ public class Trees : MonoBehaviour
 
     }
 
-    // Start is called before the first frame update 
+    /// <summary>
+    /// Start runs once at the Start(after awake).
+    /// <para>
+    /// Generates the forest itself. The entire script is meant to run here.
+    /// </para>
+    /// </summary>
     void Start()
     {
         Debug.Log("Start.");
 
-        int numberOfClusters = GenerateNumberOfForestCluesters(MIN_TREE_CLUSTERS, MAX_TREE_CLUSTERS);
+        int numberOfClusters = GenerateNumberOfForestCluesters(MIN_CLUSTERS, MAX_CLUSTERS);
         GenerateForestClusters(numberOfClusters);
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// Update runs once per frame.
+    /// <para>
+    /// May be used in the future to destroy props or affect them in other ways.
+    /// </para>
+    /// </summary>
     void Update()
     {
 
@@ -108,78 +143,74 @@ public class Trees : MonoBehaviour
 
 
 
-    /// <summary>
-    /// Generate number of tree clusters to be generated.
-    /// </summary>
-    /// <param name="min">Minimum amount of clusters to generate.</param>
-    /// <param name="max">Minimum amount of clusters to generate.</param>
-    /// <returns></returns>
-    private int GenerateNumberOfForestCluesters(int min, int max)
-    {
-        //TODO Make random - descrete uniform
-        return (min + max) / 2;
-    }
+
 
     /// <summary>
-    /// Generates <c>numberOfClusters</c> forest clusters.
+    /// Generates <c>numberOfClusters</c> clusters.
+    /// <para>
+    /// Generates clusters from <c>numberOfClusters</c> to 1.
+    /// </para>
+    /// <para>
+    /// Takes care of equally dividing the props(bushes or trees) per cluster and populating the clusters.
+    /// </para>
     /// </summary>
-    /// <param name="numberOfClusters">Amount of forest clusters to be generated.</param>
+    /// <param name="numberOfClusters">Amount of clusters to be generated.</param>
     private void GenerateForestClusters(int numberOfClusters)
     {
-        int treesToPlace = MAX_TREES;
+
+        int propsToPlace = MAX_PROPS;//Remaining props not placed yet.
 
         for (int i = numberOfClusters; i > 0; i--)
         {
 
-            GameObject treeCluster = new GameObject("TreeCluster-" + i);
-            treeCluster.transform.parent = transform;
-            // Debug.Log("Generated Tree cluster - " + i);
+            GameObject cluster = new GameObject("Cluster-" + i);
+            cluster.transform.parent = transform;//Set each cluster as a child of Trees
+            // Debug.Log("Generated Cluster - " + i);
 
+            int propsInCurrentCluster = propsToPlace / i;
 
+            PopulateCluster(propsInCurrentCluster, cluster, TREE_RATIO);
 
-            int treesPerCircle = treesToPlace / i;
-
-            GenerateForestCluster(treesPerCircle, treeCluster, TREE_RATIO);
-
-            treesToPlace -= treesPerCircle;
+            propsToPlace -= propsInCurrentCluster;
 
 
         }
     }
 
     /// <summary>
-    /// Generate a forest cluster composed of a central tree and <c>numberOfTrees</c> trees and bushes around it.
+    /// Populates a cluster composed of a central tree and <c>numberOfTrees</c> trees and bushes around it.
+    /// <para>
+    /// Generates all the props that compose the cluster.
+    /// </para>
+    /// <para>
+    /// If the generated trees end up with too many generations(more than 5 to 10 should be big bumbers) it may mean the cluster is overpopulated with Trees.
+    /// Solve it by decreasing the <c>treeRatio</c> or the <c>numberOfProps</c>.
+    /// </para>
     /// </summary>
-    /// <param name="numberOfTrees">Amount of forest props to generate(Trees and Bushes).</param>
-    /// <param name="treeClusterParent">Parent "forest".</param>
+    /// <param name="numberOfProps">Amount of forest props to generate(Trees and Bushes).</param>
+    /// <param name="clusterParent">Parent "forest" or "cluster".</param>
     /// <param name="treeRatio">It generates <c>treeRatio</c> trees and 1-<c>treeRatio</c> bushes.</param>
-    private void GenerateForestCluster(int numberOfTrees, GameObject treeClusterParent, float treeRatio = 0.7f)
+    private void PopulateCluster(int numberOfProps, GameObject clusterParent, float treeRatio = 0.7f)
     {
-        // positionCluster(treeClusterParent);//May be repositioned.
 
-        // GameObject centralTree = GenerateTree(origin, Quaternion.identity, treeClusterParent.transform, 2, 3, RedLeafMaterial);
-        GameObject centralTree = placeMainTree(treeClusterParent);
-
+        GameObject centralTree = placeMainTree(clusterParent);
         centralTree.name = "CentralTree";
 
         int generation = 0;
-        int placedTrees = 1;
-        while (placedTrees < numberOfTrees)
+        int placedProps = 1;
+        while (placedProps < numberOfProps)
         {
-            int placeThisCicle = numberOfTrees - placedTrees;
-            int lastTree = (int)(placeThisCicle * treeRatio);
+            int placeThisCicle = numberOfProps - placedProps;
+            int lastProp = (int)(placeThisCicle * treeRatio);
             for (int i = 0; i != placeThisCicle; i++)
             {
-                //TODO Make random - use uniform.
-                float angle = Random.Range(0, 2 * Mathf.PI);
-                //TODO Make random - use normal.
-                float radious = Random.Range(20, 40);
+                Vector2 propLocation = GeneratePropLocation();
 
-                GameObject currentObject = PlaceProp(PolarToCartesian(angle, radious), Quaternion.identity, treeClusterParent.transform, i < lastTree);
+                GameObject currentObject = PlaceProp(PolarToCartesian(propLocation), Quaternion.identity, clusterParent.transform, i < lastProp);
 
                 if (currentObject != null)
                 {
-                    placedTrees++;
+                    placedProps++;
                     currentObject.name += " - gen " + generation + " - " + i;
                 }
 
@@ -189,22 +220,12 @@ public class Trees : MonoBehaviour
 
     }
 
-    private void positionCluster(GameObject treeClusterParent)
-    {
-        //TODO Make random - use uniform.
-        float x = Random.Range(-Floor.transform.localScale.x / 2, Floor.transform.localScale.x / 2);
-        //TODO Make random - use uniform.
-        float z = Random.Range(-Floor.transform.localScale.z / 2, Floor.transform.localScale.z / 2);
-
-        treeClusterParent.transform.SetLocalPositionAndRotation(new Vector3(x, 0, z), Quaternion.identity);
-    }
-
     /// <summary>
-    /// Generates a new tree or bush.
+    /// Generates a new Tree or Bush.
     /// </summary>
     /// <param name="position">Relative position to the parentCluster center.</param>
-    /// <param name="rotation">Tree orientation. May be used to set an inclination.</param>
-    /// <param name="parent">Forest cluster object. The parent of this Tree.</param>
+    /// <param name="rotation">Prop orientation. May be used to set an inclination.</param>
+    /// <param name="parent">Forest cluster object. The parent of this Prop.</param>
     /// <param name="isTree">True generates a tree, false generates a bush.</param>
     /// <returns>The generated object or null if it fails.</returns>
     private GameObject PlaceProp(Vector3 position, Quaternion rotation, Transform parent, bool isTree = true)
@@ -228,7 +249,18 @@ public class Trees : MonoBehaviour
     /// <returns></returns>
     private Vector3 PolarToCartesian(float angle, float radious)
     {
-        return new Vector3(Mathf.Cos(angle) * radious, 0, Mathf.Sin(angle) * radious);
+        Vector2 polarCoords = new Vector2(angle, radious);
+        return PolarToCartesian(polarCoords);
+    }
+
+    /// <summary>
+    /// Translates a given 2d polar coordinate into a Vector3 cartesian coordinate with height 0.
+    /// </summary>
+    /// <param name="polarCoords">Polar coordinates with x representing the angle and y representing the radious.</param>
+    /// <returns></returns>
+    private Vector3 PolarToCartesian(Vector2 polarCoords)
+    {
+        return new Vector3(Mathf.Cos(polarCoords.x) * polarCoords.y, 0, Mathf.Sin(polarCoords.x) * polarCoords.y);
     }
 
     /// <summary>
@@ -239,16 +271,19 @@ public class Trees : MonoBehaviour
     /// <param name="parentCluster">Forest cluster object. The parent of this Tree</param>
     /// <param name="height">Tree height multiplier.</param>
     /// <param name="width">Tree width multiplier.</param>
+    /// <param name="leafMaterialOverride">If set will override the leaf color.</param>
+    /// <param name="allowOutOfBounds">Defines if the tree may skip out of bounds checks.</param>
     /// <returns>A Tree GameObject or null if it fails.</returns>
-    private GameObject GenerateTree(Vector3 position, Quaternion rotation, Transform parentCluster, float height = 1, float width = 1, Material leafMaterialOverride = null, Boolean allowOutOfBounds = false)
+    private GameObject GenerateTree(Vector3 position, Quaternion rotation, Transform parentCluster, float height = 1, float width = 1, Material leafMaterialOverride = null, bool allowOutOfBounds = false)
     {
 
         position += parentCluster.position;
 
+        //Check if the tree is inside the map.
         if (!allowOutOfBounds && !isInsideMap(position))
             return null;
 
-
+        //Check for tree colisions.
         foreach (var collider in Physics.OverlapCapsule(position, position + new Vector3(0, 10, 0), 1))
         {
             if (collider.gameObject.CompareTag("Tree"))
@@ -280,17 +315,19 @@ public class Trees : MonoBehaviour
     /// Generate a Bush prop.
     /// </summary>
     /// <param name="position">Relative position to the parentCluster center.</param>
-    /// <param name="rotation">Bush orientation. May be used to set an inclination.</param>
+    /// <param name="rotation">Bush orientation. May be used to set an inclination. Has no use with default material.</param>
     /// <param name="parentCluster">Forest cluster object. The parent of this Bush</param>
     /// <param name="height">Bush height multiplier.</param>
     /// <param name="width">Bush width multiplier.</param>
-    /// <returns>A Bush GameObject.</returns>
-    private GameObject GenerateBush(Vector3 position, Quaternion rotation, Transform parentCluster, float height = 1, float width = 1, Material leafMaterialOverride = null, Boolean allowOutOfBounds = false)
+    /// <param name="leafMaterialOverride">If set will override the leaf color.</param>
+    /// <param name="allowOutOfBounds">Defines if the bush may skip out of bounds checks.</param>
+    /// <returns>A Bush GameObject or null if it fails.</returns>
+    private GameObject GenerateBush(Vector3 position, Quaternion rotation, Transform parentCluster, float height = 1, float width = 1, Material leafMaterialOverride = null, bool allowOutOfBounds = false)
     {
 
         position += parentCluster.position;
 
-
+        //Out of bounds check.
         if (!allowOutOfBounds && !isInsideMap(position))
             return null;
 
@@ -304,41 +341,101 @@ public class Trees : MonoBehaviour
         if (leafMaterialOverride)
         {
             bush.transform.Find("Sphere").GetComponent<MeshRenderer>().material = leafMaterialOverride;
-
         }
 
         return bush;
 
     }
 
-    private Boolean isInsideMap(Vector3 position)
+    /// <summary>
+    /// Checks if a given position is inside the bounds of the Floor's transform.
+    /// 
+    /// <para>
+    /// ATENTION! Update this if the floor is updated.
+    /// </para>
+    /// </summary>
+    /// <param name="position">Position to check.</param>
+    /// <returns></returns>
+    private bool isInsideMap(Vector3 position)
     {
         Vector3 floorTransform = Floor.transform.lossyScale;//May be better to use localScale
         return position.x < floorTransform.x / 2 && position.z < floorTransform.z / 2 && position.x > -floorTransform.x / 2 && position.z > -floorTransform.z / 2;
     }
 
-    private GameObject placeMainTree(GameObject treeClusterParent)
+    /// <summary>
+    /// Places the main tree, handling the edge cases in which it is not generated.
+    /// </summary>
+    /// <param name="clusterParent">The cluster to use as the parent for the tree.</param>
+    /// <returns>A Tree GameObject.</returns>
+    private GameObject placeMainTree(GameObject clusterParent)
     {
         int maintTreeWidthMultiplier = 3;
         int maintTreeHeightMultiplier = 2;
 
-        positionCluster(treeClusterParent);
+        positionCluster(clusterParent);
 
         GameObject generatedTree = null;
+        //While tree not successefuly generated.
         while (generatedTree == null)
         {
-            foreach (var collider in Physics.OverlapCapsule(treeClusterParent.transform.position, treeClusterParent.transform.position + new Vector3(0, maintTreeHeightMultiplier, 0), maintTreeWidthMultiplier))
+            //If a relevant colision is detected.
+            foreach (var collider in Physics.OverlapCapsule(clusterParent.transform.position, clusterParent.transform.position + new Vector3(0, maintTreeHeightMultiplier, 0), maintTreeWidthMultiplier))
             {
                 if (collider.gameObject.CompareTag("Tree"))
                 {
-                    positionCluster(treeClusterParent);
+                    positionCluster(clusterParent);
                     break;
                 }
             }
-            generatedTree = GenerateTree(origin, Quaternion.identity, treeClusterParent.transform, maintTreeHeightMultiplier, maintTreeWidthMultiplier, RedLeafMaterial);
+            generatedTree = GenerateTree(origin, Quaternion.identity, clusterParent.transform, maintTreeHeightMultiplier, maintTreeWidthMultiplier, RedLeafMaterial);
         }
         return generatedTree;
     }
+
+
+
+
+
+
+    /// <summary>
+    /// Generate number of clusters to be generated.
+    /// </summary>
+    /// <param name="min">Minimum amount of clusters to generate.</param>
+    /// <param name="max">Maximum amount of clusters to generate.</param>
+    /// <returns>The ammount of clusters to generate.</returns>
+    private int GenerateNumberOfForestCluesters(int min, int max)
+    {
+        //TODO Make random - discrete uniform
+        return (min + max) / 2;
+    }
+
+    /// <summary>
+    /// Generates the polar coordinates of a new prop.
+    /// </summary>
+    /// <returns>A vector containing the angle as the x and the radious as the y.</returns>
+    private static Vector2 GeneratePropLocation()
+    {
+        //TODO Make random - use uniform.
+        float angle = Random.Range(0, 2 * Mathf.PI);
+        //TODO Make random - use normal.
+        float radious = Random.Range(20, 40);
+        return new Vector2(angle, radious);
+    }
+
+    /// <summary>
+    /// Reposition the given cluster to a randomly selected place.
+    /// </summary>
+    /// <param name="clusterParent">The cluster to be repositioned.</param>
+    private void positionCluster(GameObject clusterParent)
+    {
+        //TODO Make random - use uniform.
+        float x = Random.Range(-Floor.transform.localScale.x / 2, Floor.transform.localScale.x / 2);
+        //TODO Make random - use uniform.
+        float z = Random.Range(-Floor.transform.localScale.z / 2, Floor.transform.localScale.z / 2);
+
+        clusterParent.transform.SetLocalPositionAndRotation(new Vector3(x, 0, z), Quaternion.identity);
+    }
+
 }
 
 
