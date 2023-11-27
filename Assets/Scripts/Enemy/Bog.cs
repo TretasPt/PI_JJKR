@@ -45,13 +45,12 @@ public class Bog : MonoBehaviour
     void Awake()
     {
         target = GameObject.FindGameObjectsWithTag("Player")[0];
-        state = 0;
         states = new State[]
         {
-            new EmptySearchState(this)
-
+            new EmptySearchState(this),
+            new PikeSearchState(this)
         };
-        states[state].start();
+        setState(STATE_EMPTY_SEARCH);
     }
 
     // Update is called once per frame
@@ -162,10 +161,15 @@ public class Bog : MonoBehaviour
 
 
 
+    public Bog getHandle()
+    {
+        return this;
+    }
 
     public void setState(int newState)
     {
         state = newState;
+        states[state].start();
     }
 
     public void setDestinationVector(Vector3 destinationVector)

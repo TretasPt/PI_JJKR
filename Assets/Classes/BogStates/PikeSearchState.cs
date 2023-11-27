@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class PikeSearchState
+public class PikeSearchState : State
 {
     private Bog bog;
 
     private Cooldown COOLDOWN_end;
 
-    private PikeCluster[] pikeClusters;
+    private GameObject[] pikeClusters;
 
     private int currentCluster;
 
@@ -20,8 +20,8 @@ public class PikeSearchState
     {
         this.bog = bog;
         COOLDOWN_end = new Cooldown(bog.COOLDOWN_pike_search_end);
-        pikeClusters = new PikeCluster[bog.ATTRIBUTE_maximum_number_of_pike_clusters];
-        currentCluster = 0;
+        pikeClusters = new GameObject[bog.ATTRIBUTE_maximum_number_of_pike_clusters];
+        currentCluster = -1;
     }
 
     public void start()
@@ -43,12 +43,26 @@ public class PikeSearchState
 
     private void spawnPikeCluster()
     {
-                                                           //TODO Implementar
+        //TODO Implementar
+        if (currentCluster < pikeClusters.Length)
+        {
+            pikeClusters[++currentCluster] = new GameObject();
+            pikeClusters[currentCluster].AddComponent<PikeCluster>();
+            pikeClusters[currentCluster].GetComponent<PikeCluster>().init(bog);
+        }
+        else
+        {
+            currentCluster = 0;
+            pikeClusters[currentCluster].GetComponent<PikeCluster>().destroy();
+            pikeClusters[++currentCluster] = new GameObject();
+            pikeClusters[currentCluster].AddComponent<PikeCluster>();
+            pikeClusters[currentCluster].GetComponent<PikeCluster>().init(bog);
+        }
     }
 
     private void followLatestPike()
     {
-        Vector3 vectorToDestination = pikeClusters[currentCluster].getLatestPikePosition() - bog.transform.position;
+        Vector3 vectorToDestination = pikeClusters[currentCluster].GetComponent<PikeCluster>().getLatestPikePosition() - bog.transform.position;
         bog.setDestinationVector(vectorToDestination);
     }
 }

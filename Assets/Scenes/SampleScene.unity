@@ -459,20 +459,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0039b032d58032141afe326e3bcb6093, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maximum_number_of_pike_clusters: 4
-  number_of_pikes_per_cluster: 7
-  maximum_empty_search_pivot_angle: 150
-  pike_spawn_pivot_angle: 60
-  vision_angle: 100
-  visionRadious: 20
-  pike_spawn_distance: 2
-  COOLDOWN_pike_spawn: 3
+  ATTRIBUTE_maximum_number_of_pike_clusters: 0
+  ATTRIBUTE_pike_cluster_capacity: 0
+  ATTRIBUTE_initial_pike_spawn_distance: 0
+  ATTRIBUTE_maximum_empty_search_pivot_angle: 0
+  ATTRIBUTE_maximum_pike_spawn_pivot_angle: 0
+  ATTRIBUTE_vision_angle: 0
+  ATTRIBUTE_vision_radious: 0
+  ATTRIBUTE_pike_spawn_time: 0
+  ATTRIBUTE_pike_spawn_distance: 0
+  ATTRIBUTE_walkSpeed: 0
+  ATTRIBUTE_runSpeed: 0
   COOLDOWN_player_out_of_range: 10
   COOLDOWN_attack: 1
   COOLDOWN_empty_search_end: 40
   COOLDOWN_empty_search_next_directon: 3
-  walkSpeed: 2
-  runSpeed: 2
+  COOLDOWN_pike_search_end: 0
+  PREFAB_pikePrefab: {fileID: 0}
 --- !u!54 &237381723
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -15,9 +15,10 @@ public class PikeCluster : MonoBehaviour
 
     private int growCapacity;
 
-    public PikeCluster(Bog bog)
+    public void init(Bog bog)
     {
-        transform.position = bog.transform.position + bog.transform.forward*bog.ATTRIBUTE_initial_pike_spawn_distance;
+        this.bog = bog;
+        transform.position = bog.transform.position + bog.ATTRIBUTE_initial_pike_spawn_distance*bog.transform.forward;
         transform.rotation = bog.transform.rotation;
         pikes = new GameObject[bog.ATTRIBUTE_pike_cluster_capacity];
         growCapacity = bog.ATTRIBUTE_pike_cluster_capacity;
@@ -38,7 +39,7 @@ public class PikeCluster : MonoBehaviour
     {
         setRotation();
         setPosition();
-        pikes[--growCapacity]  = Instantiate(bog.PREFAB_pikePrefab, transform.position, transform.rotation);
+        pikes[--growCapacity] = Instantiate(bog.PREFAB_pikePrefab, transform.position, transform.rotation);
         pikes[growCapacity].transform.parent = transform;
         yield return new WaitForSeconds(bog.ATTRIBUTE_pike_spawn_time);
     }
@@ -58,5 +59,12 @@ public class PikeCluster : MonoBehaviour
     public Vector3 getLatestPikePosition()
     {
         return pikes[growCapacity].transform.position;
+    }
+
+    public void destroy()
+    {
+        for (int i = 0; i < pikes.Length; i++)
+            Destroy(pikes[i]);
+        Destroy(gameObject);
     }
 }
