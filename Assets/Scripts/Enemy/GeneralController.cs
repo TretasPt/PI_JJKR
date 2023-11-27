@@ -66,7 +66,7 @@ public class BogGeneralController : MonoBehaviour
     private void spawnPike()
     {
         GameObject pike = new GameObject("Pike");
-        (pike.AddComponent(typeof(PikeMovement)) as PikeMovement).setParameters(0);
+        (pike.AddComponent(typeof(PikeCluster)) as PikeCluster).setParameters(0);
         pike.transform.position = transform.position + (new Vector3(0, 2f, 0));
         pike.transform.rotation = transform.rotation;
     }

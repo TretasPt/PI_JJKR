@@ -8,33 +8,34 @@ using UnityEngine.AI;
 
 public class Bog : MonoBehaviour
 {
-    public const int STATE_EMPTY_SEARCH = 0;
-    public const int STATE_PIKE_SEARCH = 1;
-    public const int STATE_BLOODY_PIKE_SEARCH = 2;
-    public const int STATE_PERSUING = 3;
-    public const int STATE_OUT_OF_RANGE = 4;
+    [NonSerialized] public const int STATE_EMPTY_SEARCH = 0;
+    [NonSerialized] public const int STATE_PIKE_SEARCH = 1;
+    [NonSerialized] public const int STATE_BLOODY_PIKE_SEARCH = 2;
+    [NonSerialized] public const int STATE_PERSUING = 3;
+    [NonSerialized] public const int STATE_OUT_OF_RANGE = 4;
 
-    public int maximum_number_of_pike_clusters;
-    public int number_of_pikes_per_cluster;
+    public int ATTRIBUTE_maximum_number_of_pike_clusters;
+    public int ATTRIBUTE_pike_cluster_capacity;
+    public float ATTRIBUTE_initial_pike_spawn_distance;
+    public float ATTRIBUTE_maximum_empty_search_pivot_angle;
+    public float ATTRIBUTE_maximum_pike_spawn_pivot_angle;
+    public float ATTRIBUTE_vision_angle;
+    public float ATTRIBUTE_vision_radious;
+    public float ATTRIBUTE_pike_spawn_time;
+    public float ATTRIBUTE_pike_spawn_distance;
+    public float ATTRIBUTE_walkSpeed;
+    public float ATTRIBUTE_runSpeed;
 
-    public float maximum_empty_search_pivot_angle;
-    public float pike_spawn_pivot_angle;
-    public float vision_angle;
-    public float visionRadious;
-
-    public float pike_spawn_distance;
-
-    public float COOLDOWN_pike_spawn;
     public float COOLDOWN_player_out_of_range;
     public float COOLDOWN_attack;
     public float COOLDOWN_empty_search_end;
     public float COOLDOWN_empty_search_next_directon;
+    public float COOLDOWN_pike_search_end;
+    public float COOLDOWN_pike_search_next_pike;
 
-    public float walkSpeed;
-    public float runSpeed;
+    public GameObject PREFAB_pikePrefab;
 
     private Transform head;
-
     private GameObject target;
     private Vector3 targetVector;
     private Vector3 destinationVector;
@@ -48,7 +49,7 @@ public class Bog : MonoBehaviour
         state = 0;
         states = new State[]
         {
-            new EmptySearchState(this, COOLDOWN_empty_search_end, COOLDOWN_empty_search_next_directon)
+            new EmptySearchState(this)
 
         };
         states[state].start();
@@ -112,7 +113,7 @@ public class Bog : MonoBehaviour
 
     public void move()
     {
-        Vector3 move = destinationVector.normalized*walkSpeed;
+        Vector3 move = destinationVector.normalized*ATTRIBUTE_walkSpeed;
         GetComponent<Rigidbody>().AddForce(move, ForceMode.VelocityChange);
     }
 
@@ -137,7 +138,7 @@ public class Bog : MonoBehaviour
 
     private bool targetWithinVision()
     {
-        return Vector3.Angle(transform.forward, targetVector) < vision_angle;
+        return Vector3.Angle(transform.forward, targetVector) < ATTRIBUTE_vision_angle;
     }
 
     private bool targetInFront()
@@ -145,7 +146,7 @@ public class Bog : MonoBehaviour
         return Physics.Raycast(
             transform.position,
             targetVector,
-            visionRadious,
+            ATTRIBUTE_vision_radious,
             1 << target.gameObject.layer
         );
     }
@@ -162,15 +163,6 @@ public class Bog : MonoBehaviour
 
 
 
-    public Vector3 getPosition()
-    {
-        return transform.position;
-    }
-
-    public float getMaximumEmptySearchPivotAngle()
-    {
-        return maximum_empty_search_pivot_angle;
-    }
 
     public void setState(int newState)
     {

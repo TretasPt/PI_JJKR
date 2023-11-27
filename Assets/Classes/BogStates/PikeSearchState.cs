@@ -13,11 +13,13 @@ public class PikeSearchState
 
     private Cooldown COOLDOWN_nextPike;
 
-    public PikeSearchState(Bog bog, float cooldown_end, float cooldown_next_pike)
+    private PikeCluster[][] pikes;
+
+    public PikeSearchState(Bog bog)
     {
         this.bog = bog;
-        COOLDOWN_end = new Cooldown(cooldown_end);
-        COOLDOWN_nextPike = new Cooldown(cooldown_next_pike);
+        COOLDOWN_end = new Cooldown(bog.COOLDOWN_pike_search_end);
+        COOLDOWN_nextPike = new Cooldown(bog.COOLDOWN_pike_search_next_pike);
     }
 
     public void start()
@@ -31,10 +33,14 @@ public class PikeSearchState
         if (COOLDOWN_end.done())
             bog.setState(Bog.STATE_EMPTY_SEARCH);
         else if (COOLDOWN_nextPike.done())
-            spawnNextPike();
+            spawnNextPikeCluster();
+
+        bog.checkTargetPresence();
+        bog.look();
+        bog.move();                                     //TODO isto terá problemas com colisões ???
     }
 
-    private void spawnNextPike()
+    private void spawnNextPikeCluster()
     {
 
     }
