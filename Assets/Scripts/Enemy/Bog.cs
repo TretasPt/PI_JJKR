@@ -30,8 +30,7 @@ public class Bog : MonoBehaviour
     public float COOLDOWN_attack;
     public float COOLDOWN_empty_search_end;
     public float COOLDOWN_empty_search_next_directon;
-    public float COOLDOWN_pike_search_end;
-    public float COOLDOWN_pike_search_next_pike;
+    public float COOLDOWN_pike_search_end; 
 
     public GameObject PREFAB_pikePrefab;
 
@@ -114,7 +113,7 @@ public class Bog : MonoBehaviour
     public void move()
     {
         Vector3 move = destinationVector.normalized*ATTRIBUTE_walkSpeed;
-        GetComponent<Rigidbody>().AddForce(move, ForceMode.VelocityChange);
+        GetComponent<Rigidbody>().AddForce(move, ForceMode.VelocityChange);         //TODO usar CharacterController
     }
 
 

@@ -31,17 +31,14 @@ public class PikeCluster : MonoBehaviour
     private IEnumerator growRoutine()
     {
         while (growCapacity > 0)
-        {
-            growCapacity--;
             yield return waitAndGrow();
-        }
     }
 
     private IEnumerator waitAndGrow()
     {
         setRotation();
         setPosition();
-        pikes[growCapacity]  = Instantiate(bog.PREFAB_pikePrefab, transform.position, transform.rotation);
+        pikes[--growCapacity]  = Instantiate(bog.PREFAB_pikePrefab, transform.position, transform.rotation);
         pikes[growCapacity].transform.parent = transform;
         yield return new WaitForSeconds(bog.ATTRIBUTE_pike_spawn_time);
     }
@@ -56,5 +53,10 @@ public class PikeCluster : MonoBehaviour
     private void setPosition()
     {
         transform.position = transform.forward * bog.ATTRIBUTE_pike_spawn_distance;
+    }
+
+    public Vector3 getLatestPikePosition()
+    {
+        return pikes[growCapacity].transform.position;
     }
 }
