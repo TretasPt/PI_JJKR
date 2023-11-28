@@ -67,7 +67,7 @@ public class Trees : MonoBehaviour
     /// Default value. Likely overwriden in Inspector.
     /// </para>
     /// </value>
-    public int MIN_CLUSTERS = 100;
+    public int MIN_CLUSTERS = 10;
 
     /// <value>
     /// Maximum amount of environment clusters to generate.
@@ -75,7 +75,7 @@ public class Trees : MonoBehaviour
     /// Default value. Likely overwriden in Inspector.
     /// </para>
     /// </value>
-    public int MAX_CLUSTERS = 100;
+    public int MAX_CLUSTERS = 10;
 
     /// <summary>
     /// Ratio of Trees to Bushes.

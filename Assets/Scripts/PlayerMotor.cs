@@ -1,24 +1,33 @@
+using System;
+using System.Net.NetworkInformation;
+using System.Collections.Specialized;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMotor : MonoBehaviour
 {
-
+    [HideInInspector]
+    public static Action shootInput;
+    
     private CharacterController controller;
     [SerializeField] private Vector3 playerVelocity;
+    [SerializeField] public bool airMovement = false;
+    [SerializeField] public float speed = 5f;
+    [SerializeField] public float friction = 1.5f;
+    [SerializeField] public float gravity = -35f;//-9.8f;
+    [SerializeField] public float jumpHeight = 3f;
+    [SerializeField] public float airMovementScaling = 0.4f;
     private bool isGrounded;
-    public float speed = 5f;
-    public float friction = 1.5f;
-    public float gravity = -20f;//-9.8f;
-    public float jumpHeight = 3f;
-    public bool airMovement = false;
+    
 
 
     // Start is called before the first frame update
     void Start()
     {
+        LockCursor();
         controller = GetComponent<CharacterController>();
+        controller.detectCollisions = false; //temp
     }
 
     // Update is called once per frame
@@ -29,39 +38,29 @@ public class PlayerMotor : MonoBehaviour
 
     public void ProcessMove(Vector2 input)
     {
-
-
-
         if (isGrounded || airMovement)
         {
             playerVelocity.x += input.x * speed;
             playerVelocity.z += input.y * speed;
-            // Vector3 moveDirection = Vector3.zero;
-            // moveDirection.x = input.x;
-            // moveDirection.z = input.y;
-
-            // controller.Move(transform.TransformDirection(moveDirection) * speed * Time.deltaTime);
-
             playerVelocity.x /= friction;
             playerVelocity.z /= friction;
         }
         if (!isGrounded)
         {
             playerVelocity.y += gravity * Time.deltaTime;
+            playerVelocity.x += input.x * speed * airMovementScaling;
+            playerVelocity.z += input.y * speed * airMovementScaling;
+            //airFriction is the same as ground friction. It is working well :)
+            playerVelocity.x /= friction;
+            playerVelocity.z /= friction;
         }
-
-
-
-
-
+        
         if (isGrounded && playerVelocity.y < 0)
         {
             playerVelocity.y = -2f;
         }
 
         controller.Move(transform.TransformDirection(playerVelocity) * Time.deltaTime);
-
-
     }
 
     public void Jump()
@@ -70,6 +69,28 @@ public class PlayerMotor : MonoBehaviour
         {
             playerVelocity.y = Mathf.Sqrt(jumpHeight * -3.0f * gravity);
         }
+    }
+
+    public void ProcessShoot()
+    {
+        //Chekcs if left mouse button is being pressed
+        if (Input.GetMouseButton(0))
+        {
+            Debug.Log("Gun was Shot");
+            shootInput?.Invoke();
+        }
+    }
+    //Locks the cursor in the center of the screen and makes it invisible
+    public static void LockCursor()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+    //Unlocks the cursor from the center of the screen and makes it visible again
+    public static void UnlockCursor()
+    {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
 }
