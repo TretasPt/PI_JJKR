@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TreeEditor;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = System.Random;
 
 public class Gun : MonoBehaviour
 {
@@ -45,10 +47,28 @@ public class Gun : MonoBehaviour
         }
                 
     }
+    public static float SampleGaussian(Random random, float mean, float stddev)
+    {
+        // converts uniform random of (0,1] to [0,1)
+        float x1 = (float)(1 - random.NextDouble());
+        float x2 = (float)(1 - random.NextDouble());
 
+        float y1 = Mathf.Sqrt(-2.0f * Mathf.Log(x1)) * Mathf.Cos(2.0f * Mathf.PI * x2);
+        return y1 * stddev + mean;
+    }
     private Vector3 ShootingTarget()
     {
-        return rootParent.transform.forward;
+        Random rand = new Random();
+        
+        Vector3 direction= rootParent.transform.forward;
+        Vector3 Shift = Vector3.zero;
+        
+        Shift.x += SampleGaussian(rand, gunData.mean, gunData.stddev); 
+        Shift.y += SampleGaussian(rand, gunData.mean, gunData.stddev); 
+        Shift.z += SampleGaussian(rand, gunData.mean, gunData.stddev); 
+        
+        direction += Shift;
+        return direction;
     }
     
     private bool CanShoot()
