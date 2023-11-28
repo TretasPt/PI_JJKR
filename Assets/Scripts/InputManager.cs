@@ -11,6 +11,7 @@ public class InputManager : MonoBehaviour
 
     private PlayerMotor motor;
     private PlayerLook look;
+    
 
     // Start is called before the first frame update
     void Awake()
@@ -26,6 +27,7 @@ public class InputManager : MonoBehaviour
     void FixedUpdate()
     {
         motor.ProcessMove(defaultActions.Movement.ReadValue<Vector2>());
+        motor.ProcessShoot();
     }
 
     void LateUpdate()
