@@ -10,9 +10,8 @@ public class Bog : MonoBehaviour
 {
     [NonSerialized] public const int STATE_EMPTY_SEARCH = 0;
     [NonSerialized] public const int STATE_PIKE_SEARCH = 1;
-    [NonSerialized] public const int STATE_BLOODY_PIKE_SEARCH = 2;
-    [NonSerialized] public const int STATE_PERSUING = 3;
-    [NonSerialized] public const int STATE_OUT_OF_RANGE = 4;
+    [NonSerialized] public const int STATE_PERSUING = 2;
+    [NonSerialized] public const int STATE_OUT_OF_RANGE = 3;
 
     public int ATTRIBUTE_maximum_number_of_pike_clusters;
     public int ATTRIBUTE_pike_cluster_capacity;
@@ -23,10 +22,11 @@ public class Bog : MonoBehaviour
     public float ATTRIBUTE_vision_radious;
     public float ATTRIBUTE_pike_spawn_time;
     public float ATTRIBUTE_pike_spawn_distance;
-    public float ATTRIBUTE_walkSpeed;
-    public float ATTRIBUTE_runSpeed;
+    public float ATTRIBUTE_walk_speed;
+    public float ATTRIBUTE_run_speed;
+    public float ATTRIBUTE_out_of_range_distance;
 
-    public float COOLDOWN_player_out_of_range;
+    public float COOLDOWN_out_of_range_end;
     public float COOLDOWN_attack;
     public float COOLDOWN_empty_search_end;
     public float COOLDOWN_empty_search_next_directon;
@@ -41,94 +41,56 @@ public class Bog : MonoBehaviour
     private int state;
     private State[] states;
 
-    // Start is called before the first frame update
     void Awake()
     {
         target = GameObject.FindGameObjectsWithTag("Player")[0];
         states = new State[]
         {
             new EmptySearchState(this),
-            new PikeSearchState(this)
+            new PikeSearchState(this),
+            new PersuingState(this),
+            new OutOfRangeState(this)
         };
         setState(STATE_EMPTY_SEARCH);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        //states[state].update();
-
         states[state].update();
-
-        //does teleport
-        //does walk
-        //does attack
-        //does spawn pike
-        //does behaviour animation
     }
 
-    //State specific update
-    private void pikeSearchUpdate()
+    public void checkRange()
     {
-
+        if ((transform.position - target.transform.position).magnitude > ATTRIBUTE_out_of_range_distance)
+            setState(STATE_OUT_OF_RANGE);
     }
-
-    //State specific update
-    private void bloodyPikeSearchUpdate()
-    {
-
-    }
-
-    //State specific update
-    private void persuingUpdate()
-    {
-
-    }
-
-    //State specific update
-    private void lostTargetUpdate()
-    {
-
-    }
-
-
-
-
-
-
-
-
-
-    public void checkTargetPresence()
-    {
-
-    }
-
     public void look()
     {
-        //if (targetVisible()) setState(STATE_PERSUING);                           //Este método é suposto ter mais alguma coisa ???
+        if (state != STATE_PERSUING && targetVisible())
+            setState(STATE_PERSUING);
+        else if (state == STATE_PERSUING && !targetVisible())
+            setState(STATE_EMPTY_SEARCH);
     }
-
+    public void persue()
+    {
+        setDestinationVector(target.transform.position - transform.position);
+    }
     public void move()
     {
-        Vector3 move = destinationVector.normalized*ATTRIBUTE_walkSpeed;
-        GetComponent<Rigidbody>().AddForce(move, ForceMode.VelocityChange);         //TODO usar CharacterController
+        Vector3 move = destinationVector.normalized*ATTRIBUTE_walk_speed;
+        //GetComponent<Rigidbody>().AddForce(move, ForceMode.VelocityChange);       //TODO Delete quando possível
+        GetComponent<CharacterController>().Move(move*Time.deltaTime);
+    }
+    public void attack()
+    {
+
+    }
+    public void teleport()
+    {
+
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private bool targetVisible()                                   // Set vectorToTarget aqui ou em outra funcao?
+    private bool targetVisible()
     {
         targetVector = target.transform.position - transform.position;
         return targetWithinVision() && targetInFront();
@@ -149,18 +111,6 @@ public class Bog : MonoBehaviour
         );
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     public Bog getHandle()
     {
         return this;
@@ -168,12 +118,26 @@ public class Bog : MonoBehaviour
 
     public void setState(int newState)
     {
+        Debug.Log("New state: " + newState);
         state = newState;
         states[state].start();
     }
 
     public void setDestinationVector(Vector3 destinationVector)
     {
-        this.destinationVector = destinationVector;                                                //TODO Implementar para quando destination não se encontra na navmesh
+        this.destinationVector = destinationVector;
     }
 }
+
+
+/*
+TODO
+ - (Optional) Estado BloodyPikeSearch
+ - Acabar de usar COOLDOWN_run na classe PersuingState
+ - Estado Persuing
+ - Estado OutOfRange
+ - Usar CharacterController em vez de RigidBody.ApplyForce()
+ - Implementar attck()
+ - Usar deltaTime
+ - falta usar a range de visão?
+*/

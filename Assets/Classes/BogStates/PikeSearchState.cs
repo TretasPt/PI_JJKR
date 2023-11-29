@@ -36,9 +36,9 @@ public class PikeSearchState : State
             bog.setState(Bog.STATE_EMPTY_SEARCH);
         followLatestPike();
 
-        bog.checkTargetPresence();
+        bog.checkRange();
         bog.look();
-        bog.move();                                     //TODO isto terá problemas com colisões ???
+        bog.move();
     }
 
     private void spawnPikeCluster()

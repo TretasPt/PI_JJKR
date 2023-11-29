@@ -34,18 +34,20 @@ public class EmptySearchState : State
     public void update()
     {
         if (COOLDOWN_end.done())
-            bog.setState(Bog.STATE_PIKE_SEARCH);           //TODO ALterar para estado certo
+            bog.setState(Bog.STATE_PIKE_SEARCH);
         else if (COOLDOWN_nextDirection.done())
+        {
+            COOLDOWN_nextDirection.setStart();
             setNextDirection();
+        }
 
-        bog.checkTargetPresence();
+        bog.checkRange();
         bog.look();
         bog.move();
     }
 
     private void setNextDirection()
     {
-        COOLDOWN_nextDirection.setStart();
         maxAngleToDestination *= 0.9f;                                                                        //TODO nao hardcoded
         float angleToDestination = UnityEngine.Random.Range(-maxAngleToDestination, maxAngleToDestination);             // TODO VA
         Vector3 vectorToDestination = Quaternion.Euler(0, angleToDestination, 0) * bog.transform.forward;
