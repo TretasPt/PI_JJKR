@@ -15,11 +15,14 @@ public class PikeCluster : MonoBehaviour
 
     private int growCapacity;
 
+    private GameObject spawn;
+
     public void init(Bog bog)
     {
         this.bog = bog;
-        transform.position = bog.transform.position + bog.ATTRIBUTE_initial_pike_spawn_distance*bog.transform.forward;
-        transform.rotation = bog.transform.rotation;
+        spawn = new GameObject();
+        spawn.transform.position = bog.transform.position + bog.ATTRIBUTE_initial_pike_spawn_distance*bog.transform.forward;
+        spawn.transform.rotation = bog.transform.rotation;
         pikes = new GameObject[bog.ATTRIBUTE_pike_cluster_capacity];
         growCapacity = bog.ATTRIBUTE_pike_cluster_capacity;
     }
@@ -39,8 +42,8 @@ public class PikeCluster : MonoBehaviour
     {
         setRotation();
         setPosition();
-        pikes[--growCapacity] = Instantiate(bog.PREFAB_pikePrefab, transform.position, transform.rotation);
-        pikes[growCapacity].transform.parent = transform;
+        pikes[--growCapacity] = Instantiate(bog.PREFAB_pikePrefab, spawn.transform.position, spawn.transform.rotation, transform);
+        //pikes[growCapacity].transform.parent = transform;
         yield return new WaitForSeconds(bog.ATTRIBUTE_pike_spawn_time);
     }
 
@@ -48,12 +51,13 @@ public class PikeCluster : MonoBehaviour
     {
         float rotateY = Random.Range(-bog.ATTRIBUTE_maximum_pike_spawn_pivot_angle, bog.ATTRIBUTE_maximum_pike_spawn_pivot_angle);
         Quaternion rotate = Quaternion.AngleAxis(rotateY, Vector3.up);
-        transform.rotation = transform.rotation * rotate;
+        spawn.transform.rotation = spawn.transform.rotation * rotate;
     }
 
     private void setPosition()
     {
-        transform.position = transform.forward * bog.ATTRIBUTE_pike_spawn_distance;
+        Vector3 vectorToPosition = spawn.transform.rotation*(bog.ATTRIBUTE_pike_spawn_distance * transform.forward);
+        spawn.transform.position = spawn.transform.position + vectorToPosition;
     }
 
     public Vector3 getLatestPikePosition()
@@ -67,4 +71,11 @@ public class PikeCluster : MonoBehaviour
             Destroy(pikes[i]);
         Destroy(gameObject);
     }
+
+
+    /*
+    TODO 
+     - Associar ao parent que, por agora, é criado mas não está ainda como parent dos pikes
+     - Corrigir orientação do modelo dos pikes
+    */
 }
