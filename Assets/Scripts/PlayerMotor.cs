@@ -9,6 +9,7 @@ public class PlayerMotor : MonoBehaviour
 {
     [HideInInspector]
     public static Action shootInput;
+    public static Action reloadInput;
     
     private CharacterController controller;
     [SerializeField] private Vector3 playerVelocity;
@@ -18,6 +19,7 @@ public class PlayerMotor : MonoBehaviour
     [SerializeField] public float gravity = -35f;//-9.8f;
     [SerializeField] public float jumpHeight = 3f;
     [SerializeField] public float airMovementScaling = 0.4f;
+    [SerializeField] private KeyCode reloadKey;
     private bool isGrounded;
     
 
@@ -76,8 +78,12 @@ public class PlayerMotor : MonoBehaviour
         //Chekcs if left mouse button is being pressed
         if (Input.GetMouseButton(0))
         {
-            Debug.Log("Gun was Shot");
             shootInput?.Invoke();
+        }
+
+        if (Input.GetKeyDown(reloadKey))
+        {
+            reloadInput?.Invoke();
         }
     }
     //Locks the cursor in the center of the screen and makes it invisible

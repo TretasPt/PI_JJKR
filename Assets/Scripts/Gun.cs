@@ -1,10 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TreeEditor;
 using Unity.VisualScripting;
 using UnityEngine;
-using Random = System.Random;
+using SysRandom = System.Random;
 
 public class Gun : MonoBehaviour
 {
@@ -15,10 +14,14 @@ public class Gun : MonoBehaviour
     private CharacterController controller;
     private float timeSinceLastShot = 0;
 
+    private GameObject bulletHoles;
+
     private void Start()
     {
         rootParent = transform.parent.parent.gameObject;
         PlayerMotor.shootInput += Shoot;
+        PlayerMotor.reloadInput += StartReload;
+        bulletHoles = new GameObject("Bullet Holes");
     }
 
     private void Update()
@@ -31,14 +34,12 @@ public class Gun : MonoBehaviour
         //Can Shoot
         if (CanShoot())
         {
-            Debug.Log("Tried to Shoot");
             Vector3 randomizedDirecition = ShootingTarget();
             Vector3 origin = transform.position + transform.forward.normalized * 2;
             //controller.detectCollisions = false;
             if (Physics.Raycast(origin, randomizedDirecition, out RaycastHit hitInfo, gunData.maxDistance))
             {
-                Instantiate(bulletHole, origin + randomizedDirecition.normalized * hitInfo.distance, Quaternion.identity);
-                Debug.Log("Hitted at " + hitInfo.distance);
+                Instantiate(bulletHole, origin + randomizedDirecition.normalized * hitInfo.distance, Quaternion.identity, bulletHoles.transform);
             }
             //controller.detectCollisions = true;
             gunData.currentAmmo--;
@@ -47,7 +48,23 @@ public class Gun : MonoBehaviour
         }
                 
     }
-    public static float SampleGaussian(Random random, float mean, float stddev)
+
+    public void StartReload()
+    {
+        if (!gunData.reloading)
+        {
+            StartCoroutine(Reload());
+        }
+    }
+
+    private IEnumerator Reload()
+    {
+        gunData.reloading = true;
+        yield return new WaitForSeconds(gunData.relaodTime);
+        gunData.currentAmmo = gunData.maxAmmo;
+        gunData.reloading = false;
+    }
+    public static float SampleGaussian(SysRandom random, float mean, float stddev)
     {
         // converts uniform random of (0,1] to [0,1)
         float x1 = (float)(1 - random.NextDouble());
@@ -58,8 +75,7 @@ public class Gun : MonoBehaviour
     }
     private Vector3 ShootingTarget()
     {
-        Random rand = new Random();
-        
+        SysRandom rand = new SysRandom();
         Vector3 direction= rootParent.transform.forward;
         Vector3 Shift = Vector3.zero;
         

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using SysRandom = System.Random; //cause why not -_-
 
 /// <summary>
 /// Singleton class <c>Trees</c> represents the forest and it's generation.
@@ -88,7 +89,7 @@ public class Trees : MonoBehaviour
     /// </summary>
     public float TREE_RATIO = 0.7f;
 
-
+    private Terrain terrain;
 
 
 
@@ -122,7 +123,7 @@ public class Trees : MonoBehaviour
     void Start()
     {
         Debug.Log("Start.");
-
+        terrain = GameObject.Find("Floor").gameObject.GetComponent<Terrain>();
         int numberOfClusters = GenerateNumberOfForestCluesters(MIN_CLUSTERS, MAX_CLUSTERS);
         GenerateForestClusters(numberOfClusters);
     }
@@ -291,21 +292,28 @@ public class Trees : MonoBehaviour
                 return null;
             }
         }
-
-        GameObject tree = Instantiate(TreePrefab, position, rotation, parentCluster);
-
+        //GameObject tree = Instantiate(TreePrefab, position, rotation, parentCluster);
+        
+        //TODO properly implement Uniform Random Variable for selecting the tree type and fixing this more or less messy code
+        position.y = terrain.terrainData.GetHeight((int)position.x, (int)position.z);
+        int numTreesInResources = 10; //porque sim
+        int scale = 3; //porque sim
+        SysRandom rand = new SysRandom();
+        GameObject randomTree = Resources.Load<GameObject>("Tree_" + rand.Next(0,numTreesInResources));
+        GameObject tree = Instantiate(randomTree, position, rotation, parentCluster);
+        tree.transform.localScale = new Vector3(scale, scale, scale);
         tree.name = "Tree";
 
-        Vector3 scale = new Vector3(width, height, width);
-        tree.transform.localScale = Vector3.Scale(scale, tree.transform.localScale);
+        //Vector3 scale = new Vector3(width, height, width);
+        //tree.transform.localScale = Vector3.Scale(scale, tree.transform.localScale);
 
 
 
-        if (leafMaterialOverride)
+        /*if (leafMaterialOverride)
         {
             tree.transform.Find("Sphere").GetComponent<MeshRenderer>().material = leafMaterialOverride;
 
-        }
+        }*/
 
         return tree;
 
@@ -331,18 +339,26 @@ public class Trees : MonoBehaviour
         if (!allowOutOfBounds && !isInsideMap(position))
             return null;
 
-        GameObject bush = Instantiate(BushPrefab, position, rotation, parentCluster);
-
+        //GameObject bush = Instantiate(BushPrefab, position, rotation, parentCluster);
+        
+        //TODO properly implement Uniform Random Variable for selecting the bush type and fixing this more or less messy code
+        position.y = terrain.terrainData.GetHeight((int)position.x, (int)position.z);
+        int numBushesinResources = 5; //porque sim
+        int scale = 3; //porque sim
+        SysRandom rand = new SysRandom();
+        GameObject randomBush = Resources.Load<GameObject>("Bush_" + rand.Next(0,numBushesinResources));
+        GameObject bush = Instantiate(randomBush, position, rotation, parentCluster);
+        bush.transform.localScale = new Vector3(scale, scale, scale);
         bush.name = "Bush";
 
-        Vector3 scale = new Vector3(width, height, width);
-        bush.transform.localScale = Vector3.Scale(scale, bush.transform.localScale);
-
+        //Vector3 scale = new Vector3(width, height, width);
+        //bush.transform.localScale = Vector3.Scale(scale, bush.transform.localScale);
+        /*
         if (leafMaterialOverride)
         {
             bush.transform.Find("Sphere").GetComponent<MeshRenderer>().material = leafMaterialOverride;
         }
-
+        */
         return bush;
 
     }

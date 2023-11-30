@@ -19,4 +19,6 @@ MonoBehaviour:
   maxAmmo: 30
   fireRate: 500
   relaodTime: 2
+  mean: 0
+  stddev: 0.04
   reloading: 0
