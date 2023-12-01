@@ -681,7 +681,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: b294bbebf98945045b59caf7f5d0bf2a, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 76d13b9c562de31b1b47c2c198da1417, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -706,12 +706,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: babc24b41683bc7c7b2de502703857b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  depth: 10
+  depth: 20
   width: 1000
   height: 1000
   scale: 10
   offSetX: 100
   offSetY: 100
+--- !u!1 &782628375
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 782628376}
+  m_Layer: 0
+  m_Name: Bullet Holes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &782628376
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 782628375}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1820797511}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &951514457
 GameObject:
   m_ObjectHideFlags: 0
@@ -862,12 +893,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Floor: {fileID: 725304840}
-  TreePrefab: {fileID: 114418, guid: dff415a1d14bf7181a1c362bf445531b, type: 3}
-  BushPrefab: {fileID: 7992715529498131577, guid: 0cc0db2b14252644da9f1f74ed0c8f90, type: 3}
   RedLeafMaterial: {fileID: 2100000, guid: 1f41f85e7c9b5a2458ce30fa31d561a0, type: 2}
-  MAX_PROPS: 1000
-  MIN_CLUSTERS: 100
-  MAX_CLUSTERS: 100
+  MAX_PROPS: 1500
+  MIN_CLUSTERS: 150
+  MAX_CLUSTERS: 150
   TREE_RATIO: 0.7
 --- !u!4 &1051686660 stripped
 Transform:
@@ -1212,6 +1241,7 @@ Transform:
   - {fileID: 184858305}
   - {fileID: 1256521081}
   - {fileID: 1008556104}
+  - {fileID: 782628376}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2045117388
@@ -1369,8 +1399,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 137937803}
-  xSensitivity: 30
-  ySensitivity: 30
+  xSensitivity: 15
+  ySensitivity: 15
 --- !u!54 &2121204587
 Rigidbody:
   m_ObjectHideFlags: 0

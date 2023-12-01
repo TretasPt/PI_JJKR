@@ -21,7 +21,7 @@ public class Gun : MonoBehaviour
         rootParent = transform.parent.parent.gameObject;
         PlayerMotor.shootInput += Shoot;
         PlayerMotor.reloadInput += StartReload;
-        bulletHoles = new GameObject("Bullet Holes");
+        bulletHoles = GameObject.Find("Bullet Holes");
     }
 
     private void Update()
