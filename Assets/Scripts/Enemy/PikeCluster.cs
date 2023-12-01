@@ -11,6 +11,8 @@ public class PikeCluster : MonoBehaviour
 {
     private Bog bog;
 
+    private GameObject target;
+
     private GameObject[] pikes;
 
     private int growCapacity;
@@ -20,6 +22,7 @@ public class PikeCluster : MonoBehaviour
     public void init(Bog bog)
     {
         this.bog = bog;
+        target = GameObject.FindGameObjectsWithTag("Player")[0];
         spawn = new GameObject();
         spawn.transform.position = bog.transform.position + bog.ATTRIBUTE_initial_pike_spawn_distance*bog.transform.forward;
         spawn.transform.rotation = bog.transform.rotation;
@@ -42,16 +45,20 @@ public class PikeCluster : MonoBehaviour
     {
         setRotation();
         setPosition();
-        pikes[--growCapacity] = Instantiate(bog.PREFAB_pikePrefab, spawn.transform.position, spawn.transform.rotation, transform);
-        //pikes[growCapacity].transform.parent = transform;
+        GameObject pikeParent = new GameObject();
+        pikeParent.transform.parent = transform;
+        pikeParent.transform.position = spawn.transform.position + new Vector3(0,-6,0);
+        pikeParent.transform.rotation = spawn.transform.rotation;
+        pikes[--growCapacity] = Instantiate(bog.PREFAB_pikePrefab, new Vector3(0,0,0), Quaternion.Euler(0,0,0), pikeParent.transform);
+        pikes[growCapacity].GetComponent<Animator>().SetBool("Activate", true);
         yield return new WaitForSeconds(bog.ATTRIBUTE_pike_spawn_time);
     }
 
     private void setRotation()
     {
         float rotateY = Random.Range(-bog.ATTRIBUTE_maximum_pike_spawn_pivot_angle, bog.ATTRIBUTE_maximum_pike_spawn_pivot_angle);
-        Quaternion rotate = Quaternion.AngleAxis(rotateY, Vector3.up);
-        spawn.transform.rotation = spawn.transform.rotation * rotate;
+        float rotationToTarget = spawn.transform.rotation.y + Vector3.SignedAngle(Vector3.forward, target.transform.position - spawn.transform.position, Vector3.up);
+        spawn.transform.rotation = Quaternion.Euler(0,rotationToTarget + rotateY,0);
     }
 
     private void setPosition()
@@ -77,5 +84,6 @@ public class PikeCluster : MonoBehaviour
     TODO 
      - Associar ao parent que, por agora, é criado mas não está ainda como parent dos pikes
      - Corrigir orientação do modelo dos pikes
+     - Fazer seguir o player
     */
 }

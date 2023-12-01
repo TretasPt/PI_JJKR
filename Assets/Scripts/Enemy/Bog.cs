@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 using UnityEngine.AI;
+using UnityEngine.InputSystem.Controls;
 
 public class Bog : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class Bog : MonoBehaviour
     [NonSerialized] public const int STATE_PIKE_SEARCH = 1;
     [NonSerialized] public const int STATE_PERSUING = 2;
     [NonSerialized] public const int STATE_OUT_OF_RANGE = 3;
+
+    [NonSerialized] private const float gravity = -20f;
 
     public int ATTRIBUTE_maximum_number_of_pike_clusters;
     public int ATTRIBUTE_pike_cluster_capacity;
@@ -25,6 +28,7 @@ public class Bog : MonoBehaviour
     public float ATTRIBUTE_walk_speed;
     public float ATTRIBUTE_run_speed;
     public float ATTRIBUTE_out_of_range_distance;
+    public float ATTRIBUTE_friction;
 
     public float COOLDOWN_out_of_range_end;
     public float COOLDOWN_attack;
@@ -35,11 +39,18 @@ public class Bog : MonoBehaviour
     public GameObject PREFAB_pikePrefab;
 
     private Transform head;
+
     private GameObject target;
+
     private Vector3 targetVector;
+
     private Vector3 destinationVector;
+
     private int state;
+
     private State[] states;
+
+    private Vector3 velocity;
 
     void Awake()
     {
@@ -59,6 +70,9 @@ public class Bog : MonoBehaviour
         states[state].update();
     }
 
+    //Actions
+    //  \/
+
     public void checkRange()
     {
         if ((transform.position - target.transform.position).magnitude > ATTRIBUTE_out_of_range_distance)
@@ -77,9 +91,16 @@ public class Bog : MonoBehaviour
     }
     public void move()
     {
-        Vector3 move = destinationVector.normalized*ATTRIBUTE_walk_speed;
-        //GetComponent<Rigidbody>().AddForce(move, ForceMode.VelocityChange);       //TODO Delete quando possível
-        GetComponent<CharacterController>().Move(move*Time.deltaTime);
+        velocity += destinationVector.normalized * ATTRIBUTE_walk_speed;             // TODO Aplicar current speed
+        velocity.x /= ATTRIBUTE_friction;
+        velocity.z /= ATTRIBUTE_friction;
+        velocity.y += gravity * Time.deltaTime;
+
+        float rotate = Vector3.SignedAngle(transform.forward, destinationVector, Vector3.up) * 2f * Time.deltaTime;       //TODO não fazer hardcoded
+        float rotationY = transform.rotation.eulerAngles.y;
+
+        GetComponent<CharacterController>().Move(velocity*Time.deltaTime);
+        transform.rotation = Quaternion.Euler(0, rotationY + rotate, 0);
     }
     public void attack()
     {
@@ -89,6 +110,9 @@ public class Bog : MonoBehaviour
     {
 
     }
+
+    //  /\
+    //Actions
 
     private bool targetVisible()
     {
@@ -111,20 +135,15 @@ public class Bog : MonoBehaviour
         );
     }
 
-    public Bog getHandle()
-    {
-        return this;
-    }
-
     public void setState(int newState)
     {
-        Debug.Log("New state: " + newState);
         state = newState;
         states[state].start();
     }
 
     public void setDestinationVector(Vector3 destinationVector)
     {
+        destinationVector.y = 0;
         this.destinationVector = destinationVector;
     }
 }
@@ -134,6 +153,9 @@ public class Bog : MonoBehaviour
 TODO
  - (Optional) Estado BloodyPikeSearch
  - Acabar de usar COOLDOWN_run na classe PersuingState
+ - Implementar os diferentes tipos de ataque (normal, spell, salto)
+ - Eliminar classe Path
+ - Fazer rotation do Inimigo
  - Estado Persuing
  - Estado OutOfRange
  - Usar CharacterController em vez de RigidBody.ApplyForce()
