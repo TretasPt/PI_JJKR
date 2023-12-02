@@ -1037,23 +1037,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ATTRIBUTE_maximum_number_of_pike_clusters: 4
-  ATTRIBUTE_pike_cluster_capacity: 10
-  ATTRIBUTE_initial_pike_spawn_distance: 3
-  ATTRIBUTE_maximum_empty_search_pivot_angle: 90
-  ATTRIBUTE_maximum_pike_spawn_pivot_angle: 60
+  ATTRIBUTE_pike_cluster_capacity: 40
+  ATTRIBUTE_initial_pike_spawn_distance: 1
+  ATTRIBUTE_maximum_empty_search_pivot_angle: 60
+  ATTRIBUTE_maximum_pike_spawn_pivot_angle: 40
   ATTRIBUTE_vision_angle: 100
   ATTRIBUTE_vision_radious: 20
-  ATTRIBUTE_pike_spawn_time: 2
-  ATTRIBUTE_pike_spawn_distance: 3
+  ATTRIBUTE_pike_spawn_time: 0.2
+  ATTRIBUTE_pike_spawn_distance: 1
   ATTRIBUTE_walk_speed: 3
   ATTRIBUTE_run_speed: 6
   ATTRIBUTE_out_of_range_distance: 80
   ATTRIBUTE_friction: 1.9
   COOLDOWN_out_of_range_end: 10
   COOLDOWN_attack: 1
-  COOLDOWN_empty_search_end: 10
+  COOLDOWN_empty_search_end: 2
   COOLDOWN_empty_search_next_directon: 2
-  COOLDOWN_pike_search_end: 15
+  COOLDOWN_pike_search_end: 2
   PREFAB_pikePrefab: {fileID: 6258553920967109008, guid: e2369b59557172f4b8c67f0e8254ab7d, type: 3}
 --- !u!114 &1716922533
 MonoBehaviour:

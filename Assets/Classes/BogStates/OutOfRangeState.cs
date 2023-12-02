@@ -23,6 +23,7 @@ public class OutOfRangeState : State
 
     public void update()
     {
+        COOLDOWN_end.count();
         if (COOLDOWN_end.done())
         {
             bog.teleport();

@@ -12,7 +12,7 @@ public class PersuingState : State
 
     private Cooldown COOLDOWN_attack;
 
-    private Cooldown COOLDOWN_run;
+    private Cooldown COOLDOWN_run;                      //TODO Isto é para quê?
 
     public PersuingState(Bog bog)
     {
@@ -27,6 +27,7 @@ public class PersuingState : State
 
     public void update()
     {
+        COOLDOWN_attack.count();
         if (COOLDOWN_attack.done())
         {
             COOLDOWN_attack.setStart();

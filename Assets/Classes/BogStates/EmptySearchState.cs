@@ -33,6 +33,8 @@ public class EmptySearchState : State
 
     public void update()
     {
+        COOLDOWN_end.count();
+        COOLDOWN_nextDirection.count();
         if (COOLDOWN_end.done())
             bog.setState(Bog.STATE_PIKE_SEARCH);
         else if (COOLDOWN_nextDirection.done())

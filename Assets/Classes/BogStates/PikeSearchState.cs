@@ -32,6 +32,7 @@ public class PikeSearchState : State
 
     public void update()
     {
+        COOLDOWN_end.count();
         if (COOLDOWN_end.done())
             bog.setState(Bog.STATE_EMPTY_SEARCH);
         followLatestPike();
@@ -43,21 +44,15 @@ public class PikeSearchState : State
 
     private void spawnPikeCluster()
     {
-        //TODO Implementar
-        if (currentCluster < pikeClusters.Length)
-        {
-            pikeClusters[++currentCluster] = new GameObject();
-            pikeClusters[currentCluster].AddComponent<PikeCluster>();
-            pikeClusters[currentCluster].GetComponent<PikeCluster>().init(bog);
-        }
-        else
+        currentCluster++;
+        if (currentCluster == pikeClusters.Length)
         {
             currentCluster = 0;
             pikeClusters[currentCluster].GetComponent<PikeCluster>().destroy();
-            pikeClusters[++currentCluster] = new GameObject();
-            pikeClusters[currentCluster].AddComponent<PikeCluster>();
-            pikeClusters[currentCluster].GetComponent<PikeCluster>().init(bog);
         }
+        pikeClusters[currentCluster] = new GameObject();
+        pikeClusters[currentCluster].AddComponent<PikeCluster>();
+        pikeClusters[currentCluster].GetComponent<PikeCluster>().init(bog);
     }
 
     private void followLatestPike()

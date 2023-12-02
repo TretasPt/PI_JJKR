@@ -3,25 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public class Cooldown
 {
     float time;
-    DateTime start;
+    float timePassed;
 
     public Cooldown(float cooldownTime)
     {
         time = cooldownTime;
-        start = new DateTime();
+        timePassed = 0; 
     }
 
     public void setStart()
     {
-        start = DateTime.Now;
+        timePassed = 0;
+    }
+
+    public void count()
+    {
+        timePassed += Time.deltaTime;
     }
 
     public bool done()
     {
-        return (DateTime.Now - start).TotalSeconds > time;
+        return timePassed > time;
     }
 };
