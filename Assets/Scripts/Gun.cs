@@ -40,6 +40,7 @@ public class Gun : MonoBehaviour
             if (Physics.Raycast(origin, randomizedDirecition, out RaycastHit hitInfo, gunData.maxDistance))
             {
                 Instantiate(bulletHole, origin + randomizedDirecition.normalized * hitInfo.distance, Quaternion.identity, bulletHoles.transform);
+                Debug.Log(hitInfo.collider.gameObject);
             }
             //controller.detectCollisions = true;
             gunData.currentAmmo--;

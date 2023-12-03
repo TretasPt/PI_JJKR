@@ -100,7 +100,7 @@ public class Trees : MonoBehaviour
     /// Ensures there is a single instance of the script.
     /// </para>
     /// </summary>
-    void Awake()
+    /*void Awake()
     {
         Debug.Log("Awake.");
 
@@ -113,7 +113,7 @@ public class Trees : MonoBehaviour
             Instance = this;
         }
 
-    }
+    }*/
 
     /// <summary>
     /// Start runs once at the Start(after awake).
@@ -288,14 +288,27 @@ public class Trees : MonoBehaviour
                 return null;
             }
         }
+        
         //Generate newPosition based on terrain height
-        float newY = terrain.terrainData.GetHeight((int)(position.x), (int)(position.z));
-        Vector3 newPosition = new Vector3(position.x, Mathf.Pow(newY,2), position.z);
+        if (Physics.Raycast(new Vector3(position.x, 0, position.z), Vector3.down, out RaycastHit hitInfoDown, Mathf.Infinity, 3))
+            Debug.Log("Hit distance Down: " + hitInfoDown.distance + "Object :" + hitInfoDown.collider.gameObject);
+        if (Physics.Raycast(origin + new Vector3(position.x, 0, position.z), Vector3.up, out RaycastHit hitInfoUp, Mathf.Infinity, 3))
+            Debug.Log("Hit distance Up: " + hitInfoUp.distance + "Object :" + hitInfoUp.collider.gameObject);
+        float newY;
+        if (hitInfoDown.distance > 0)
+        {
+            newY = -1 * hitInfoDown.distance - 1;
+        }
+        else
+        {
+            newY = hitInfoUp.distance - 1;
+        }
+        Vector3 newPosition = new Vector3(position.x, newY, position.z);
         
         //TODO Make random - use uniform.
         GameObject randomTree = Resources.Load<GameObject>("Tree_" + Random.Range(0,numTreesInResources));
         GameObject tree = Instantiate(randomTree, newPosition, rotation, parentCluster);
-        Debug.Log(newPosition);
+        Debug.Log("New Position: " + newPosition + " NewY: " + newY);
         tree.transform.localScale = new Vector3(TreeScale, TreeScale, TreeScale);
         tree.name = "Tree";
         

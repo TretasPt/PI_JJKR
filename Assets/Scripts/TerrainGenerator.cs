@@ -18,12 +18,15 @@ public class TerrainGenerator : MonoBehaviour
 
     private void Start()
     {
+        Debug.Log("Terrain Start");
         //Randomizes terrain "seed"
         offSetX = Random.Range(0f, 9999f);
         offSetY = Random.Range(0f, 9999f);
         
         Terrain terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
+        terrain.gameObject.GetComponent<TerrainCollider>().enabled = true;
+        Debug.Log("Terrain End");
     }
     TerrainData GenerateTerrain (TerrainData terrainData) 
     {
