@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using SysRandom = System.Random; //cause why not -_-
 
 /// <summary>
 /// Singleton class <c>Trees</c> represents the forest and it's generation.
@@ -30,12 +31,10 @@ public class Trees : MonoBehaviour
     /// <value>
     /// The prefab of a Tree object with green leafs.
     /// </value>
-    public GameObject TreePrefab;
 
     /// <value>
     /// The prefab of a Bush object with green leafs.
     /// </value>
-    public GameObject BushPrefab;
 
     /// <value>
     /// Material for the leafs of the central tree.
@@ -47,7 +46,6 @@ public class Trees : MonoBehaviour
     /// Origin of the map.
     /// </value>
     public static readonly Vector3 origin = Vector3.zero;
-
 
     /// <value>
     /// Maximum amount of props to be generated.
@@ -88,8 +86,12 @@ public class Trees : MonoBehaviour
     /// </summary>
     public float TREE_RATIO = 0.7f;
 
-
-
+    private const float TreeScale = 3;
+    private const float BushScale = 3;
+    private const int numBushesInResources = 5; //Because there are 5 types of bushes in ./Assets/Resources folder
+    private const int numTreesInResources = 10; //Because there are 10 types of trees in ./Assets/Resources folder
+    private Terrain terrain;
+    private GameObject floor;
 
 
     /// <summary>
@@ -98,7 +100,7 @@ public class Trees : MonoBehaviour
     /// Ensures there is a single instance of the script.
     /// </para>
     /// </summary>
-    void Awake()
+    /*void Awake()
     {
         Debug.Log("Awake.");
 
@@ -111,7 +113,7 @@ public class Trees : MonoBehaviour
             Instance = this;
         }
 
-    }
+    }*/
 
     /// <summary>
     /// Start runs once at the Start(after awake).
@@ -122,7 +124,10 @@ public class Trees : MonoBehaviour
     void Start()
     {
         Debug.Log("Start.");
-
+        
+        floor = GameObject.Find("Floor").gameObject;
+        terrain = floor.GetComponent<Terrain>();
+        
         int numberOfClusters = GenerateNumberOfForestCluesters(MIN_CLUSTERS, MAX_CLUSTERS);
         GenerateForestClusters(numberOfClusters);
     }
@@ -137,13 +142,6 @@ public class Trees : MonoBehaviour
     {
 
     }
-
-
-
-
-
-
-
 
     /// <summary>
     /// Generates <c>numberOfClusters</c> clusters.
@@ -165,7 +163,6 @@ public class Trees : MonoBehaviour
 
             GameObject cluster = new GameObject("Cluster-" + i);
             cluster.transform.parent = transform;//Set each cluster as a child of Trees
-            // Debug.Log("Generated Cluster - " + i);
 
             int propsInCurrentCluster = propsToPlace / i;
 
@@ -291,24 +288,31 @@ public class Trees : MonoBehaviour
                 return null;
             }
         }
-
-        GameObject tree = Instantiate(TreePrefab, position, rotation, parentCluster);
-
-        tree.name = "Tree";
-
-        Vector3 scale = new Vector3(width, height, width);
-        tree.transform.localScale = Vector3.Scale(scale, tree.transform.localScale);
-
-
-
-        if (leafMaterialOverride)
+        
+        //Generate newPosition based on terrain height
+        if (Physics.Raycast(new Vector3(position.x, 0, position.z), Vector3.down, out RaycastHit hitInfoDown, Mathf.Infinity, 3))
+            Debug.Log("Hit distance Down: " + hitInfoDown.distance + "Object :" + hitInfoDown.collider.gameObject);
+        if (Physics.Raycast(origin + new Vector3(position.x, 0, position.z), Vector3.up, out RaycastHit hitInfoUp, Mathf.Infinity, 3))
+            Debug.Log("Hit distance Up: " + hitInfoUp.distance + "Object :" + hitInfoUp.collider.gameObject);
+        float newY;
+        if (hitInfoDown.distance > 0)
         {
-            tree.transform.Find("Sphere").GetComponent<MeshRenderer>().material = leafMaterialOverride;
-
+            newY = -1 * hitInfoDown.distance - 1;
         }
-
+        else
+        {
+            newY = hitInfoUp.distance - 1;
+        }
+        Vector3 newPosition = new Vector3(position.x, newY, position.z);
+        
+        //TODO Make random - use uniform.
+        GameObject randomTree = Resources.Load<GameObject>("Tree_" + Random.Range(0,numTreesInResources));
+        GameObject tree = Instantiate(randomTree, newPosition, rotation, parentCluster);
+        Debug.Log("New Position: " + newPosition + " NewY: " + newY);
+        tree.transform.localScale = new Vector3(TreeScale, TreeScale, TreeScale);
+        tree.name = "Tree";
+        
         return tree;
-
     }
 
     /// <summary>
@@ -331,20 +335,17 @@ public class Trees : MonoBehaviour
         if (!allowOutOfBounds && !isInsideMap(position))
             return null;
 
-        GameObject bush = Instantiate(BushPrefab, position, rotation, parentCluster);
-
+        //Generate newPosition based on terrain height
+        float newY = terrain.terrainData.GetHeight((int)(position.x), (int)(position.z));
+        Vector3 newPosition = new Vector3(position.x, newY, position.z);
+        
+        //TODO Make random - use uniform.
+        GameObject randomBush = Resources.Load<GameObject>("Bush_" + Random.Range(0,numBushesInResources));
+        GameObject bush = Instantiate(randomBush, newPosition, rotation, parentCluster);
+        bush.transform.localScale = new Vector3(BushScale, BushScale, BushScale);
         bush.name = "Bush";
-
-        Vector3 scale = new Vector3(width, height, width);
-        bush.transform.localScale = Vector3.Scale(scale, bush.transform.localScale);
-
-        if (leafMaterialOverride)
-        {
-            bush.transform.Find("Sphere").GetComponent<MeshRenderer>().material = leafMaterialOverride;
-        }
-
+        
         return bush;
-
     }
 
     /// <summary>

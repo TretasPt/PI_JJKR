@@ -16,6 +16,9 @@ public class GunData : ScriptableObject
     public int maxAmmo;
     public float fireRate;
     public float relaodTime;
+    [Header("Random Variables")] 
+    public float mean;
+    public float stddev;
     [HideInInspector]
     public bool reloading;
 }

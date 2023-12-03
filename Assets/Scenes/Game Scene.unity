@@ -610,9 +610,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 725304841}
-  - component: {fileID: 725304844}
-  - component: {fileID: 725304843}
-  - component: {fileID: 725304842}
+  - component: {fileID: 725304847}
+  - component: {fileID: 725304846}
+  - component: {fileID: 725304848}
   m_Layer: 0
   m_Name: Floor
   m_TagString: Untagged
@@ -629,14 +629,14 @@ Transform:
   m_GameObject: {fileID: 725304840}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.1, z: 0}
+  m_LocalPosition: {x: -321, y: -0.1, z: -323}
   m_LocalScale: {x: 500, y: 0.2, z: 500}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 184858305}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &725304842
-BoxCollider:
+--- !u!154 &725304846
+TerrainCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -650,62 +650,99 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
+  m_ProvidesContacts: 1
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &725304843
-MeshRenderer:
+  serializedVersion: 2
+  m_TerrainData: {fileID: 15600000, guid: d28ceec47c2404e2291b42e963d89f72, type: 2}
+  m_EnableTreeColliders: 1
+--- !u!218 &725304847
+Terrain:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 725304840}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  serializedVersion: 6
+  m_TerrainData: {fileID: 15600000, guid: d28ceec47c2404e2291b42e963d89f72, type: 2}
+  m_TreeDistance: 5000
+  m_TreeBillboardDistance: 50
+  m_TreeCrossFadeLength: 5
+  m_TreeMaximumFullLODCount: 50
+  m_DetailObjectDistance: 80
+  m_DetailObjectDensity: 1
+  m_HeightmapPixelError: 5
+  m_SplatMapDistance: 1000
+  m_HeightmapMaximumLOD: 0
+  m_ShadowCastingMode: 2
+  m_DrawHeightmap: 1
+  m_DrawInstanced: 0
+  m_DrawTreesAndFoliage: 1
   m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
+  m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: b294bbebf98945045b59caf7f5d0bf2a, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
+  m_MaterialTemplate: {fileID: 2100000, guid: ad8c922d58410cb709f3b23629d91ed8, type: 2}
+  m_BakeLightProbesForTrees: 1
+  m_PreserveTreePrototypeLayers: 0
+  m_DeringLightProbesForTrees: 1
   m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &725304844
-MeshFilter:
+  m_ScaleInLightmap: 1
+  m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
+  m_GroupingID: 0
+  m_RenderingLayerMask: 1
+  m_AllowAutoConnect: 0
+  m_EnableHeightmapRayTracing: 1
+  m_EnableTreesAndDetailsRayTracing: 0
+  m_TreeMotionVectorModeOverride: 3
+--- !u!114 &725304848
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 725304840}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: babc24b41683bc7c7b2de502703857b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  depth: 20
+  width: 1000
+  height: 1000
+  scale: 10
+  offSetX: 100
+  offSetY: 100
+--- !u!1 &782628375
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 782628376}
+  m_Layer: 0
+  m_Name: Bullet Holes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &782628376
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 782628375}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1820797511}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &951514457
 GameObject:
   m_ObjectHideFlags: 0
@@ -856,12 +893,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Floor: {fileID: 725304840}
-  TreePrefab: {fileID: 6400487938566776362, guid: 0743323dae59a1249bc7615a9d67918c, type: 3}
-  BushPrefab: {fileID: 337021264043671488, guid: b4a17ff8c8f6c174a844e91ff63118ef, type: 3}
   RedLeafMaterial: {fileID: 2100000, guid: 1f41f85e7c9b5a2458ce30fa31d561a0, type: 2}
-  MAX_PROPS: 5000
-  MIN_CLUSTERS: 100
-  MAX_CLUSTERS: 100
+  MAX_PROPS: 1
+  MIN_CLUSTERS: 1
+  MAX_CLUSTERS: 1
   TREE_RATIO: 0.7
 --- !u!4 &1051686660 stripped
 Transform:
@@ -1206,6 +1241,7 @@ Transform:
   - {fileID: 184858305}
   - {fileID: 1256521081}
   - {fileID: 1008556104}
+  - {fileID: 782628376}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2045117388
@@ -1337,6 +1373,7 @@ MonoBehaviour:
   gravity: -9.8
   jumpHeight: 1
   airMovementScaling: 0.4
+  reloadKey: 0
 --- !u!114 &2121204575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1362,8 +1399,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 137937803}
-  xSensitivity: 30
-  ySensitivity: 30
+  xSensitivity: 15
+  ySensitivity: 15
 --- !u!54 &2121204587
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1405,7 +1442,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2416463794048455836, guid: 7468d3994305c9a4aacfbfc648a54310, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.5
+      value: 17.22
       objectReference: {fileID: 0}
     - target: {fileID: 2416463794048455836, guid: 7468d3994305c9a4aacfbfc648a54310, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1438,6 +1475,10 @@ PrefabInstance:
     - target: {fileID: 2416463794048455836, guid: 7468d3994305c9a4aacfbfc648a54310, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5267716326890399234, guid: 7468d3994305c9a4aacfbfc648a54310, type: 3}
+      propertyPath: m_ClearFlags
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7376964607596699824, guid: 7468d3994305c9a4aacfbfc648a54310, type: 3}
       propertyPath: m_Name
