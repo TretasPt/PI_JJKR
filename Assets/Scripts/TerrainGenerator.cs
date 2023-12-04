@@ -34,7 +34,6 @@ public class TerrainGenerator : MonoBehaviour
 
         terrainData.size = new Vector3 (width, depth, height);      //(x,y,z)
         float[,] heights = GenerateHeights();
-        //heights.GetLength(0);
         terrainData.SetHeights(0, 0, heights);
         return terrainData;
     }
