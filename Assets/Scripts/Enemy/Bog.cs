@@ -104,11 +104,11 @@ public class Bog : MonoBehaviour
     }
     public void attack()
     {
-
+        GetComponent<AnimationManager>();               //TODO Implementar
     }
     public void teleport()
     {
-
+                                                    //TODO Implementar
     }
 
     //  /\
