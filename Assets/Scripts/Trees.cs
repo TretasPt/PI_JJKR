@@ -249,23 +249,7 @@ public class Trees : MonoBehaviour
         }
 
         //Generate newPosition based on terrain height
-        if (Physics.Raycast(new Vector3(position.x, 0, position.z), Vector3.down, out RaycastHit hitInfoDown, Mathf.Infinity, 3))
-        {
-            // Debug.Log("Hit distance Down: " + hitInfoDown.distance + "Object :" + hitInfoDown.collider.gameObject);
-        }
-        if (Physics.Raycast(origin + new Vector3(position.x, 0, position.z), Vector3.up, out RaycastHit hitInfoUp, Mathf.Infinity, 3))
-        {
-            // Debug.Log("Hit distance Up: " + hitInfoUp.distance + "Object :" + hitInfoUp.collider.gameObject);
-        }
-        float newY;
-        if (hitInfoDown.distance > 0)
-        {
-            newY = -1 * hitInfoDown.distance - 1;
-        }
-        else
-        {
-            newY = hitInfoUp.distance - 1;
-        }
+        float newY = terrain.SampleHeight(new Vector3(position.x, 0, position.z));
         Vector3 newPosition = new Vector3(position.x, newY, position.z);
 
         GameObject randomTree = choseRandomTree();
@@ -299,7 +283,7 @@ public class Trees : MonoBehaviour
             return null;
 
         //Generate newPosition based on terrain height
-        float newY = terrain.terrainData.GetHeight((int)(position.x), (int)(position.z));
+        float newY = terrain.SampleHeight(new Vector3(position.x, 0, position.z));
         Vector3 newPosition = new Vector3(position.x, newY, position.z);
 
         GameObject randomBush = choseRandomBush();
