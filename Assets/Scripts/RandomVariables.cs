@@ -106,7 +106,7 @@ public class RandomVariables : MonoBehaviour
     {
         if (n < 1 || p < 0 || p > 1)
         {
-            throw new ArgumentOutOfRangeException("n should be grrater or equal to 1 and p should be between 0 and 1.");
+            throw new ArgumentOutOfRangeException("n should be greater or equal to 1 and p should be between 0 and 1.");
         }
         int sum = 0;
         for (int i = 0; i < n; i++)
