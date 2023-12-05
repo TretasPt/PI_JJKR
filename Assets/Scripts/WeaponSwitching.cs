@@ -45,6 +45,6 @@ public class WeaponSwitching : MonoBehaviour
    } 
    private void OnWeaponSelect()
    {
-      Debug.Log("Selected a new weapon.");
+      // Debug.Log("Selected a new weapon.");
    }
 }

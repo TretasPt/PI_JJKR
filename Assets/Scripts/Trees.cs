@@ -250,9 +250,13 @@ public class Trees : MonoBehaviour
 
         //Generate newPosition based on terrain height
         if (Physics.Raycast(new Vector3(position.x, 0, position.z), Vector3.down, out RaycastHit hitInfoDown, Mathf.Infinity, 3))
-            Debug.Log("Hit distance Down: " + hitInfoDown.distance + "Object :" + hitInfoDown.collider.gameObject);
+        {
+            // Debug.Log("Hit distance Down: " + hitInfoDown.distance + "Object :" + hitInfoDown.collider.gameObject);
+        }
         if (Physics.Raycast(origin + new Vector3(position.x, 0, position.z), Vector3.up, out RaycastHit hitInfoUp, Mathf.Infinity, 3))
-            Debug.Log("Hit distance Up: " + hitInfoUp.distance + "Object :" + hitInfoUp.collider.gameObject);
+        {
+            // Debug.Log("Hit distance Up: " + hitInfoUp.distance + "Object :" + hitInfoUp.collider.gameObject);
+        }
         float newY;
         if (hitInfoDown.distance > 0)
         {
@@ -266,7 +270,7 @@ public class Trees : MonoBehaviour
 
         GameObject randomTree = choseRandomTree();
         GameObject tree = Instantiate(randomTree, newPosition, rotation, parentCluster);
-        Debug.Log("New Position: " + newPosition + " NewY: " + newY);
+        // Debug.Log("New Position: " + newPosition + " NewY: " + newY);
         tree.transform.localScale = new Vector3(TreeScale, TreeScale, TreeScale);
         tree.name = "Tree";
 
@@ -375,7 +379,7 @@ public class Trees : MonoBehaviour
     {
         float angle = (float)RandomVariables.Uniform(0f, 2 * Mathf.PI);
         //TODO Make random - use normal. Generate mean
-        float radious = (float)RandomVariables.NormalBounded(50, 15, 0, 200);
+        float radious = (float)RandomVariables.NormalBounded(50, 20, 0, 200);
         return new Vector2(angle, radious);
     }
 
