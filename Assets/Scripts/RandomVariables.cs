@@ -1,32 +1,16 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class RandomVariables : MonoBehaviour
 {
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    public int Uniform(int v1, int v2)
+    public static int Uniform(int v1, int v2)
     {
         return Random.Range(v1, v2);
     }
 
-    public double Uniform(float v1, float v2)
+    public static double Uniform(float v1, float v2)
     {
         return Random.Range(v1, v2);
     }
@@ -34,7 +18,7 @@ public class RandomVariables : MonoBehaviour
 
 
 
-    public double Normal(double mean, double standardDeviation)
+    public static double Normal(double mean, double standardDeviation)
     {
         if (standardDeviation <= 0)
         {
@@ -51,7 +35,25 @@ public class RandomVariables : MonoBehaviour
         return mean + standardDeviation * p1 * Math.Sqrt(-2f * Math.Log(p) / p);
     }
 
-    public double Arcsine(double xMin, double xMax)
+    public static double NormalBounded(double mean, double standardDeviation, double min, double max, int maxAttempts = 1000)
+    {
+        if (min >= max)
+        {
+            throw new ArgumentOutOfRangeException("min should be lesser than max.");
+        }
+        while (maxAttempts > 0)
+        {
+            double output = Normal(mean, standardDeviation);
+            if (output >= min && output <= max)
+            {
+                return output;
+            }
+            maxAttempts--;
+        }
+        throw new Exception("Exceeded max generation attempts.");
+    }
+
+    public static double Arcsine(double xMin, double xMax)
     {
         if (xMax < xMin)
         {
@@ -61,7 +63,7 @@ public class RandomVariables : MonoBehaviour
         return xMin + (xMax - xMin) * q * q;
     }
 
-    public double CustomDiscrete(double[] options, double[] weights)
+    public static double CustomDiscrete(double[] options, double[] weights)
     {
         if (options.Length != weights.Length)
         {
@@ -91,7 +93,7 @@ public class RandomVariables : MonoBehaviour
         return options[options.Length];
     }
 
-    public bool Bernoulli(double p)
+    public static bool Bernoulli(double p)
     {
         if (p < 0 || p > 1)
         {
@@ -100,7 +102,7 @@ public class RandomVariables : MonoBehaviour
         return Uniform(0f, 1f) < p;
     }
 
-    public int Binomial(int n, double p)
+    public static int Binomial(int n, double p)
     {
         if (n < 1 || p < 0 || p > 1)
         {

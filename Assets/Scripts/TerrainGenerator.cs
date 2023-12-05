@@ -10,18 +10,28 @@ public class TerrainGenerator : MonoBehaviour
     public float scale;
 
 
-    //randommize the terrain generation
-
     public float offSetX;
     public float offSetY;
 
+    public bool realTimeUpdate = false;
+
+
+    void Update()
+    {
+        if(realTimeUpdate){
+        Terrain terrain = GetComponent<Terrain>();
+        terrain.terrainData = GenerateTerrain(terrain.terrainData);
+        }
+    }
 
     private void Start()
     {
         Debug.Log("Terrain Start");
-        //Randomizes terrain "seed"
-        offSetX = Random.Range(0f, 9999f);
-        offSetY = Random.Range(0f, 9999f);
+
+        GetComponent<Transform>().SetPositionAndRotation(new Vector3(-width/2,0,-height/2),Quaternion.identity);
+
+        offSetX = (float)RandomVariables.Uniform(0f,100000f);
+        offSetY = (float)RandomVariables.Uniform(0f,100000f);
         
         Terrain terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);

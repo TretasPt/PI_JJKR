@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+// using System.Collections;
+// using System.Collections.Generic;
+// using Unity.VisualScripting;
 using UnityEngine;
-using Random = UnityEngine.Random;
-using SysRandom = System.Random; //cause why not -_-
 
 /// <summary>
 /// Singleton class <c>Trees</c> represents the forest and it's generation.
@@ -16,30 +14,12 @@ public class Trees : MonoBehaviour
 {
 
     /// <value>
-    /// Instance of the singleton class Trees. 
-    /// </value>
-    public static Trees Instance { get; private set; }
-
-    /// <value>
     /// Object where to spawn the props at.
     /// <para>
     /// Only it's dimentions are used.
     /// </para>
     /// </value>
     public GameObject Floor;
-
-    /// <value>
-    /// The prefab of a Tree object with green leafs.
-    /// </value>
-
-    /// <value>
-    /// The prefab of a Bush object with green leafs.
-    /// </value>
-
-    /// <value>
-    /// Material for the leafs of the central tree.
-    /// </value>
-    public Material RedLeafMaterial;
 
     /// <value>
     /// (0,0,0)
@@ -91,29 +71,9 @@ public class Trees : MonoBehaviour
     private const int numBushesInResources = 5; //Because there are 5 types of bushes in ./Assets/Resources folder
     private const int numTreesInResources = 10; //Because there are 10 types of trees in ./Assets/Resources folder
     private Terrain terrain;
-    private GameObject floor;
 
 
-    /// <summary>
-    /// First function to be called.
-    /// <para>
-    /// Ensures there is a single instance of the script.
-    /// </para>
-    /// </summary>
-    /*void Awake()
-    {
-        Debug.Log("Awake.");
 
-        if (Instance != null && Instance != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            Instance = this;
-        }
-
-    }*/
 
     /// <summary>
     /// Start runs once at the Start(after awake).
@@ -124,10 +84,9 @@ public class Trees : MonoBehaviour
     void Start()
     {
         Debug.Log("Start.");
-        
-        floor = GameObject.Find("Floor").gameObject;
-        terrain = floor.GetComponent<Terrain>();
-        
+
+        terrain = Floor.GetComponent<Terrain>();
+
         int numberOfClusters = GenerateNumberOfForestCluesters(MIN_CLUSTERS, MAX_CLUSTERS);
         GenerateForestClusters(numberOfClusters);
     }
@@ -288,7 +247,7 @@ public class Trees : MonoBehaviour
                 return null;
             }
         }
-        
+
         //Generate newPosition based on terrain height
         if (Physics.Raycast(new Vector3(position.x, 0, position.z), Vector3.down, out RaycastHit hitInfoDown, Mathf.Infinity, 3))
             Debug.Log("Hit distance Down: " + hitInfoDown.distance + "Object :" + hitInfoDown.collider.gameObject);
@@ -304,16 +263,16 @@ public class Trees : MonoBehaviour
             newY = hitInfoUp.distance - 1;
         }
         Vector3 newPosition = new Vector3(position.x, newY, position.z);
-        
-        //TODO Make random - use uniform.
-        GameObject randomTree = Resources.Load<GameObject>("Tree_" + Random.Range(0,numTreesInResources));
+
+        GameObject randomTree = choseRandomTree();
         GameObject tree = Instantiate(randomTree, newPosition, rotation, parentCluster);
         Debug.Log("New Position: " + newPosition + " NewY: " + newY);
         tree.transform.localScale = new Vector3(TreeScale, TreeScale, TreeScale);
         tree.name = "Tree";
-        
+
         return tree;
     }
+
 
     /// <summary>
     /// Generate a Bush prop.
@@ -338,13 +297,12 @@ public class Trees : MonoBehaviour
         //Generate newPosition based on terrain height
         float newY = terrain.terrainData.GetHeight((int)(position.x), (int)(position.z));
         Vector3 newPosition = new Vector3(position.x, newY, position.z);
-        
-        //TODO Make random - use uniform.
-        GameObject randomBush = Resources.Load<GameObject>("Bush_" + Random.Range(0,numBushesInResources));
+
+        GameObject randomBush = choseRandomBush();
         GameObject bush = Instantiate(randomBush, newPosition, rotation, parentCluster);
         bush.transform.localScale = new Vector3(BushScale, BushScale, BushScale);
         bush.name = "Bush";
-        
+
         return bush;
     }
 
@@ -388,7 +346,7 @@ public class Trees : MonoBehaviour
                     break;
                 }
             }
-            generatedTree = GenerateTree(origin, Quaternion.identity, clusterParent.transform, maintTreeHeightMultiplier, maintTreeWidthMultiplier, RedLeafMaterial);
+            generatedTree = GenerateTree(origin, Quaternion.identity, clusterParent.transform, maintTreeHeightMultiplier, maintTreeWidthMultiplier);
         }
         return generatedTree;
     }
@@ -406,8 +364,7 @@ public class Trees : MonoBehaviour
     /// <returns>The ammount of clusters to generate.</returns>
     private int GenerateNumberOfForestCluesters(int min, int max)
     {
-        //TODO Make random - discrete uniform
-        return (min + max) / 2;
+        return RandomVariables.Uniform(min, max);
     }
 
     /// <summary>
@@ -416,10 +373,9 @@ public class Trees : MonoBehaviour
     /// <returns>A vector containing the angle as the x and the radious as the y.</returns>
     private static Vector2 GeneratePropLocation()
     {
-        //TODO Make random - use uniform.
-        float angle = Random.Range(0, 2 * Mathf.PI);
-        //TODO Make random - use normal.
-        float radious = Random.Range(20, 40);
+        float angle = (float)RandomVariables.Uniform(0f, 2 * Mathf.PI);
+        //TODO Make random - use normal. Generate mean
+        float radious = (float)RandomVariables.NormalBounded(50, 15, 0, 200);
         return new Vector2(angle, radious);
     }
 
@@ -429,12 +385,19 @@ public class Trees : MonoBehaviour
     /// <param name="clusterParent">The cluster to be repositioned.</param>
     private void positionCluster(GameObject clusterParent)
     {
-        //TODO Make random - use uniform.
-        float x = Random.Range(-Floor.transform.localScale.x / 2, Floor.transform.localScale.x / 2);
-        //TODO Make random - use uniform.
-        float z = Random.Range(-Floor.transform.localScale.z / 2, Floor.transform.localScale.z / 2);
+        float x = (float)RandomVariables.Uniform(-Floor.transform.localScale.x / 2, Floor.transform.localScale.x / 2);
+        float z = (float)RandomVariables.Uniform(-Floor.transform.localScale.z / 2, Floor.transform.localScale.z / 2);
 
         clusterParent.transform.SetLocalPositionAndRotation(new Vector3(x, 0, z), Quaternion.identity);
+    }
+    private GameObject choseRandomTree()
+    {
+        return Resources.Load<GameObject>("Tree_" + RandomVariables.Uniform(0, numTreesInResources));
+    }
+
+    private GameObject choseRandomBush()
+    {
+        return Resources.Load<GameObject>("Bush_" + RandomVariables.Uniform(0, numBushesInResources));
     }
 
 }
