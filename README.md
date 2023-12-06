@@ -6,7 +6,9 @@
 
 ## TODO
 
-- List
+- Destroy Tree;
+- Sprint;
+- Crouch;
 
 ## SOURCES
 
