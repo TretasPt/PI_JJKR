@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using SysRandom = System.Random;
 
 public class Gun : MonoBehaviour
 {
@@ -40,7 +39,7 @@ public class Gun : MonoBehaviour
             if (Physics.Raycast(origin, randomizedDirecition, out RaycastHit hitInfo, gunData.maxDistance))
             {
                 Instantiate(bulletHole, origin + randomizedDirecition.normalized * hitInfo.distance, Quaternion.identity, bulletHoles.transform);
-                Debug.Log(hitInfo.collider.gameObject);
+                // Debug.Log(hitInfo.collider.gameObject);
             }
             //controller.detectCollisions = true;
             gunData.currentAmmo--;
@@ -65,24 +64,15 @@ public class Gun : MonoBehaviour
         gunData.currentAmmo = gunData.maxAmmo;
         gunData.reloading = false;
     }
-    public static float SampleGaussian(SysRandom random, float mean, float stddev)
-    {
-        // converts uniform random of (0,1] to [0,1)
-        float x1 = (float)(1 - random.NextDouble());
-        float x2 = (float)(1 - random.NextDouble());
 
-        float y1 = Mathf.Sqrt(-2.0f * Mathf.Log(x1)) * Mathf.Cos(2.0f * Mathf.PI * x2);
-        return y1 * stddev + mean;
-    }
     private Vector3 ShootingTarget()
     {
-        SysRandom rand = new SysRandom();
         Vector3 direction= rootParent.transform.forward;
         Vector3 Shift = Vector3.zero;
         
-        Shift.x += SampleGaussian(rand, gunData.mean, gunData.stddev); 
-        Shift.y += SampleGaussian(rand, gunData.mean, gunData.stddev); 
-        Shift.z += SampleGaussian(rand, gunData.mean, gunData.stddev); 
+        Shift.x += (float)RandomVariables.Normal(gunData.mean, gunData.stddev);
+        Shift.y += (float)RandomVariables.Normal(gunData.mean, gunData.stddev);
+        Shift.z += (float)RandomVariables.Normal(gunData.mean, gunData.stddev);
         
         direction += Shift;
         return direction;
