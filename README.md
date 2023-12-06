@@ -9,6 +9,9 @@
 - Destroy Tree;
 - Sprint;
 - Crouch;
+- ~~Player spawn on the ground;~~
+- Make sure the player doesn't spawn in a tree;
+- Menu;
 
 ## SOURCES
 

@@ -1,4 +1,6 @@
 using System;
+using Unity.VisualScripting;
+
 // using System.Collections;
 // using System.Collections.Generic;
 // using Unity.VisualScripting;
@@ -257,6 +259,7 @@ public class Trees : MonoBehaviour
         // Debug.Log("New Position: " + newPosition + " NewY: " + newY);
         tree.transform.localScale = new Vector3(TreeScale, TreeScale, TreeScale);
         tree.name = "Tree";
+        tree.tag="Tree";
 
         return tree;
     }
@@ -290,6 +293,7 @@ public class Trees : MonoBehaviour
         GameObject bush = Instantiate(randomBush, newPosition, rotation, parentCluster);
         bush.transform.localScale = new Vector3(BushScale, BushScale, BushScale);
         bush.name = "Bush";
+        bush.tag = "Bush";
 
         return bush;
     }
@@ -387,6 +391,7 @@ public class Trees : MonoBehaviour
     {
         return Resources.Load<GameObject>("Bush_" + RandomVariables.Uniform(0, numBushesInResources));
     }
+
 
 }
 

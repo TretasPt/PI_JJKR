@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TerrainGenerator : MonoBehaviour
 {
@@ -15,11 +16,13 @@ public class TerrainGenerator : MonoBehaviour
 
     public bool realTimeUpdate = false;
 
+    Terrain terrain;
+
 
     void Update()
     {
         if(realTimeUpdate){
-        Terrain terrain = GetComponent<Terrain>();
+        terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
         }
     }
@@ -33,9 +36,10 @@ public class TerrainGenerator : MonoBehaviour
         offSetX = (float)RandomVariables.Uniform(0f,100000f);
         offSetY = (float)RandomVariables.Uniform(0f,100000f);
         
-        Terrain terrain = GetComponent<Terrain>();
+        terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
         terrain.gameObject.GetComponent<TerrainCollider>().enabled = true;
+
         Debug.Log("Terrain End");
     }
     TerrainData GenerateTerrain (TerrainData terrainData) 
@@ -68,5 +72,9 @@ public class TerrainGenerator : MonoBehaviour
         float yCoord = (float) y / height * scale + offSetY;
 
         return Mathf.PerlinNoise(xCoord, yCoord);
+    }
+
+    public Vector3 getGroundHeight(Vector3 input){
+        return new Vector3(input.x,terrain.SampleHeight(new Vector3(input.x, 0, input.y)),input.y);
     }
 }

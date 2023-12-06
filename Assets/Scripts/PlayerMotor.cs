@@ -10,7 +10,7 @@ public class PlayerMotor : MonoBehaviour
     [HideInInspector]
     public static Action shootInput;
     public static Action reloadInput;
-    
+
     private CharacterController controller;
     [SerializeField] private Vector3 playerVelocity;
     [SerializeField] public bool airMovement = false;
@@ -21,7 +21,9 @@ public class PlayerMotor : MonoBehaviour
     [SerializeField] public float airMovementScaling = 0.4f;
     [SerializeField] private KeyCode reloadKey;
     private bool isGrounded;
-    
+
+    public GameObject Floor;
+
 
 
     // Start is called before the first frame update
@@ -30,6 +32,11 @@ public class PlayerMotor : MonoBehaviour
         LockCursor();
         controller = GetComponent<CharacterController>();
         controller.detectCollisions = false; //temp
+
+        GetComponent<CharacterController>().enabled = false;
+        Vector3 groundpos = Floor.GetComponent<TerrainGenerator>().getGroundHeight(Vector3.zero);
+        transform.SetPositionAndRotation(Vector3.up+groundpos, Quaternion.identity);
+        GetComponent<CharacterController>().enabled = true;
     }
 
     // Update is called once per frame
@@ -56,7 +63,7 @@ public class PlayerMotor : MonoBehaviour
             playerVelocity.x /= friction;
             playerVelocity.z /= friction;
         }
-        
+
         if (isGrounded && playerVelocity.y < 0)
         {
             playerVelocity.y = -2f;
@@ -97,6 +104,22 @@ public class PlayerMotor : MonoBehaviour
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // speed = speed * -1;
+        Debug.Log("Hit something T.");
+
+    }
+    void OnCollisionEnter(Collision collision)
+    {
+        // ContactPoint contact = collision.contacts[0];
+        // Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contact.normal);
+        // Vector3 position = contact.point;
+        // Instantiate(explosionPrefab, position, rotation);
+        // Destroy(gameObject);
+        Debug.Log("Hit something.");
     }
 
 }
