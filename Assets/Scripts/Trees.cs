@@ -162,7 +162,9 @@ public class Trees : MonoBehaviour
             int lastProp = (int)(placeThisCicle * treeRatio);
             for (int i = 0; i != placeThisCicle; i++)
             {
-                Vector2 propLocation = GeneratePropLocation();
+                double mean = RandomVariables.Uniform(5f,50f);
+                double sDeviation = RandomVariables.Uniform(1f,50f);
+                Vector2 propLocation = GeneratePropLocation(mean,sDeviation);
 
                 GameObject currentObject = PlaceProp(PolarToCartesian(propLocation), Quaternion.identity, clusterParent.transform, i < lastProp);
 
@@ -363,11 +365,10 @@ public class Trees : MonoBehaviour
     /// Generates the polar coordinates of a new prop.
     /// </summary>
     /// <returns>A vector containing the angle as the x and the radious as the y.</returns>
-    private static Vector2 GeneratePropLocation()
+    private static Vector2 GeneratePropLocation(double mean = 50, double sDeviation =20)
     {
         float angle = (float)RandomVariables.Uniform(0f, 2 * Mathf.PI);
-        //TODO Make random - use normal. Generate mean
-        float radious = (float)RandomVariables.NormalBounded(50, 20, 0, 200);
+        float radious = (float)RandomVariables.NormalBounded(mean, sDeviation, 0, 200);
         return new Vector2(angle, radious);
     }
 
