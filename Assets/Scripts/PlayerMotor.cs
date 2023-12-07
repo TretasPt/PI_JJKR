@@ -33,10 +33,32 @@ public class PlayerMotor : MonoBehaviour
         controller = GetComponent<CharacterController>();
         controller.detectCollisions = false; //temp
 
+        bool isFreePosition = false;
+        while (!isFreePosition)
+        {
+
+            isFreePosition = ResetPlayerPosition();
+        }
+    }
+
+    private bool ResetPlayerPosition()
+    {
+        // Debug.Log("Setting player position.");
+        float x = (float)RandomVariables.NormalBounded(0,5,-10,10);
+        float z = (float)RandomVariables.NormalBounded(0,5,-10,10);
         GetComponent<CharacterController>().enabled = false;
-        Vector3 groundpos = Floor.GetComponent<TerrainGenerator>().getGroundHeight(Vector3.zero);
-        transform.SetPositionAndRotation(Vector3.up+groundpos, Quaternion.identity);
+        Vector3 position = Vector3.up + Floor.GetComponent<TerrainGenerator>().getGroundHeight(Vector3.zero);
+        transform.SetPositionAndRotation(position, Quaternion.identity);
         GetComponent<CharacterController>().enabled = true;
+
+        foreach (var collider in Physics.OverlapCapsule(position + new Vector3(0, -5, 0), position + new Vector3(0, 5, 0), 2))
+        {
+            if (collider.gameObject.CompareTag("Tree"))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     // Update is called once per frame

@@ -10,7 +10,8 @@
 - Sprint;
 - Crouch;
 - ~~Player spawn on the ground;~~
-- Make sure the player doesn't spawn in a tree;
+- ~~Make sure the player doesn't spawn in a tree;~~
+- Randomly assign mean and variance to the forest spawners;
 - Menu;
 
 ## SOURCES
