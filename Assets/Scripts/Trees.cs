@@ -253,8 +253,9 @@ public class Trees : MonoBehaviour
         }
 
         //Generate newPosition based on terrain height
-        float newY = terrain.SampleHeight(new Vector3(position.x, 0, position.z));
-        Vector3 newPosition = new Vector3(position.x, newY, position.z);
+        // float newY = terrain.SampleHeight(new Vector3(position.x, 0, position.z));
+        // Vector3 newPosition = new Vector3(position.x, newY, position.z);
+        Vector3 newPosition = Floor.GetComponent<TerrainGenerator>().getGroundHeight(new Vector3(position.x, 0, position.z)) + new Vector3(0, -0.2f, 0);
 
         GameObject randomTree = choseRandomTree();
         GameObject tree = Instantiate(randomTree, newPosition, rotation, parentCluster);
@@ -287,8 +288,10 @@ public class Trees : MonoBehaviour
             return null;
 
         //Generate newPosition based on terrain height
-        float newY = terrain.SampleHeight(new Vector3(position.x, 0, position.z));
-        Vector3 newPosition = new Vector3(position.x, newY, position.z);
+        // float newY = terrain.SampleHeight(new Vector3(position.x, 0, position.z));
+        // Vector3 newPosition = new Vector3(position.x, newY, position.z);
+        Vector3 newPosition = Floor.GetComponent<TerrainGenerator>().getGroundHeight(new Vector3(position.x, 0, position.z));// + new Vector3(0, -0.2f, 0);
+
 
         GameObject randomBush = choseRandomBush();
         GameObject bush = Instantiate(randomBush, newPosition, rotation, parentCluster);

@@ -75,6 +75,6 @@ public class TerrainGenerator : MonoBehaviour
     }
 
     public Vector3 getGroundHeight(Vector3 input){
-        return new Vector3(input.x,terrain.SampleHeight(new Vector3(input.x, 0, input.y)),input.y);
+        return new Vector3(input.x,terrain.SampleHeight(new Vector3(input.x, 0, input.z)),input.z);
     }
 }

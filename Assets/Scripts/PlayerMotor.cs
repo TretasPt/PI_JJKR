@@ -47,7 +47,7 @@ public class PlayerMotor : MonoBehaviour
         float x = (float)RandomVariables.NormalBounded(0,5,-10,10);
         float z = (float)RandomVariables.NormalBounded(0,5,-10,10);
         GetComponent<CharacterController>().enabled = false;
-        Vector3 position = Vector3.up + Floor.GetComponent<TerrainGenerator>().getGroundHeight(Vector3.zero);
+        Vector3 position = Vector3.up + Floor.GetComponent<TerrainGenerator>().getGroundHeight(new Vector3(x,0,z));
         transform.SetPositionAndRotation(position, Quaternion.identity);
         GetComponent<CharacterController>().enabled = true;
 
