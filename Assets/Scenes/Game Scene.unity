@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 241131389}
   - component: {fileID: 241131388}
   m_Layer: 0
-  m_Name: Wall1 (3)
+  m_Name: WallWest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -410,7 +410,7 @@ GameObject:
   - component: {fileID: 447159937}
   - component: {fileID: 447159936}
   m_Layer: 0
-  m_Name: Wall1 (1)
+  m_Name: WallSouth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -636,7 +636,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 0.6547475, g: 0.6603774, b: 0.38252047, a: 1}
-  m_Intensity: 0.25
+  m_Intensity: 0.35
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -858,7 +858,7 @@ GameObject:
   - component: {fileID: 951514460}
   - component: {fileID: 951514459}
   m_Layer: 0
-  m_Name: Wall1
+  m_Name: WallNorth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1045,7 +1045,7 @@ GameObject:
   - component: {fileID: 1440013737}
   - component: {fileID: 1440013736}
   m_Layer: 0
-  m_Name: Wall1 (2)
+  m_Name: WallEast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

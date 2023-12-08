@@ -258,7 +258,6 @@ public class Trees : MonoBehaviour
 
         GameObject randomTree = choseRandomTree();
         GameObject tree = Instantiate(randomTree, newPosition, rotation, parentCluster);
-        // Debug.Log("New Position: " + newPosition + " NewY: " + newY);
         tree.transform.localScale = new Vector3(TreeScale, TreeScale, TreeScale);
         tree.name = "Tree";
         tree.tag = "Tree";

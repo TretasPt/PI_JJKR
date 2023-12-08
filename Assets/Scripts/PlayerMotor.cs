@@ -130,7 +130,6 @@ public class PlayerMotor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // speed = speed * -1;
         Debug.Log("Hit something T.");
 
     }
