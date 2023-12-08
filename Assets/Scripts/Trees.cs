@@ -326,7 +326,7 @@ public class Trees : MonoBehaviour
         while (generatedTree == null)
         {
             //If a relevant colision is detected.
-            foreach (var collider in Physics.OverlapCapsule(clusterParent.transform.position, clusterParent.transform.position + new Vector3(0, maintTreeHeightMultiplier, 0), maintTreeWidthMultiplier))
+            foreach (var collider in Physics.OverlapCapsule(clusterParent.transform.position, clusterParent.transform.position + new Vector3(0, maintTreeHeightMultiplier*10, 0), maintTreeWidthMultiplier))
             {
                 if (collider.gameObject.CompareTag("Tree"))
                 {

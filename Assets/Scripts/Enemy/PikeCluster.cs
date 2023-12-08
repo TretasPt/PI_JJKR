@@ -14,11 +14,15 @@ public class PikeCluster : MonoBehaviour
 
     private GameObject target;
 
+    private Terrain terrain;
+
     private GameObject[] pikes;
 
     private int growCapacity;
 
-    private GameObject spawn;
+    private Vector3 spawnPosition;
+
+    private Quaternion spawnRotation;
 
     private Vector3 individualPosition;
 
@@ -32,13 +36,14 @@ public class PikeCluster : MonoBehaviour
     {
         this.bog = bog;
         target = GameObject.FindGameObjectsWithTag("Player")[0];
-        spawn = new GameObject();
-        spawn.transform.position = bog.transform.position + bog.ATTRIBUTE_initial_pike_spawn_distance*(target.transform.position - bog.transform.position).normalized;
-        spawn.transform.rotation = bog.transform.rotation;
+        terrain = GameObject.FindGameObjectsWithTag("Floor")[0].GetComponent<Terrain>();
+        spawnPosition = bog.transform.position + bog.ATTRIBUTE_initial_pike_spawn_distance*(target.transform.position - bog.transform.position);
+        spawnPosition.y = 0;
+        spawnRotation = bog.transform.rotation;
         pikes = new GameObject[bog.ATTRIBUTE_pike_cluster_capacity];
         growCapacity = bog.ATTRIBUTE_pike_cluster_capacity;
-        individualPosition = spawn.transform.position;
-        individualRotation = spawn.transform.rotation;
+        individualPosition = spawnPosition;
+        individualRotation = spawnRotation;
         heightIterator = 2;                                                             //TODO
     }
 
@@ -77,16 +82,17 @@ public class PikeCluster : MonoBehaviour
         float rotateX = UnityEngine.Random.Range(0,10);      //TODO
         float rotateY = UnityEngine.Random.Range(-bog.ATTRIBUTE_maximum_pike_spawn_pivot_angle, bog.ATTRIBUTE_maximum_pike_spawn_pivot_angle);
         float rotateZ = UnityEngine.Random.Range(-15,15);      //TODO
-        float rotationToTarget = spawn.transform.rotation.y + Vector3.SignedAngle(Vector3.forward, target.transform.position - spawn.transform.position, Vector3.up);
-        spawn.transform.rotation = Quaternion.Euler(0,rotationToTarget + rotateY,0);
+        float rotationToTarget = spawnRotation.y + Vector3.SignedAngle(Vector3.forward, target.transform.position - spawnPosition, Vector3.up);
+        spawnRotation = Quaternion.Euler(0,rotationToTarget + rotateY,0);
         individualRotation = Quaternion.Euler(rotateX, rotationToTarget + rotateY, rotateZ);
     }
 
     private void setPosition()
     {
-        Vector3 vectorToPosition = spawn.transform.rotation*(bog.ATTRIBUTE_pike_spawn_distance * transform.forward);
-        spawn.transform.position = spawn.transform.position + vectorToPosition;
-        individualPosition = spawn.transform.position + new Vector3(0, -bog.transform.position.y - heightIterator - 2, 0);
+        Vector3 vectorToPosition = spawnRotation*(bog.ATTRIBUTE_pike_spawn_distance * transform.forward);
+        spawnPosition = spawnPosition + vectorToPosition;
+        float terrainHeight = terrain.SampleHeight(spawnPosition);
+        individualPosition = spawnPosition + new Vector3(0, terrainHeight - heightIterator, 0);
         heightIterator -= 2f / bog.ATTRIBUTE_pike_cluster_capacity;                                                         //TODO hardcoded
     }
 

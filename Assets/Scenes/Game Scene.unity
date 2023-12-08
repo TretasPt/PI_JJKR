@@ -829,7 +829,7 @@ GameObject:
   - component: {fileID: 725304848}
   m_Layer: 0
   m_Name: Floor
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1108,7 +1108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Floor: {fileID: 725304840}
-  MAX_PROPS: 500
+  MAX_PROPS: 2000
   MIN_CLUSTERS: 10
   MAX_CLUSTERS: 10
   TREE_RATIO: 0.7
@@ -1219,6 +1219,79 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f1a7354265853f44b0ed5e2e43676ad, type: 3}
+--- !u!1001 &1420319577
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 114790560494280721, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: ATTRIBUTE_pike_spawn_time
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 114790560494280721, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: ATTRIBUTE_pike_spawn_distance
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114790560494280721, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: ATTRIBUTE_pike_cluster_capacity
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 114790560494280721, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: ATTRIBUTE_maximum_number_of_pike_clusters
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8539311261447985727, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 11.460426
+      objectReference: {fileID: 0}
+    - target: {fileID: 8539311261447985727, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 11.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 8539311261447985727, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 20.883072
+      objectReference: {fileID: 0}
+    - target: {fileID: 8539311261447985727, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8539311261447985727, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8539311261447985727, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8539311261447985727, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8539311261447985727, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8539311261447985727, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8539311261447985727, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9064174803885867141, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: m_Name
+      value: Bog
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
 --- !u!1 &1440013734
 GameObject:
   m_ObjectHideFlags: 0
@@ -1918,3 +1991,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 4493020174823006337}
   - {fileID: 1820797511}
+  - {fileID: 1420319577}

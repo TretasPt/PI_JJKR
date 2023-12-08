@@ -38,8 +38,6 @@ public class Bog : MonoBehaviour
 
     public GameObject PREFAB_pikePrefab;
 
-    private Transform head;
-
     private GameObject target;
 
     private Vector3 targetVector;
