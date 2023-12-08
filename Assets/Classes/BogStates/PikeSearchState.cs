@@ -48,7 +48,7 @@ public class PikeSearchState : State
         if (currentCluster == pikeClusters.Length)
         {
             currentCluster = 0;
-            pikeClusters[currentCluster].GetComponent<PikeCluster>().destroy();
+            pikeClusters[currentCluster].GetComponent<PikeCluster>().destroy();             //TODO só destroi o primeiro elemento
         }
         pikeClusters[currentCluster] = new GameObject();
         pikeClusters[currentCluster].AddComponent<PikeCluster>();
