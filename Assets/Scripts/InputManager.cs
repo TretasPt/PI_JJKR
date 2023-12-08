@@ -12,7 +12,7 @@ public class InputManager : MonoBehaviour
 
     private PlayerMotor motor;
     private PlayerLook look;
-    
+
 
     // Start is called before the first frame update
     void Awake()
@@ -23,7 +23,7 @@ public class InputManager : MonoBehaviour
         look = GetComponent<PlayerLook>();
         defaultActions.Jump.performed += ctx => motor.Jump();
         defaultActions.Menu.performed += ctx => OnMenuCalled();
-        defaultActions.Flashlight.performed += ctx => OnMenuCalled();
+        defaultActions.Flashlight.performed += ctx => look.FlashlightToggle();
 
     }
 
@@ -54,7 +54,8 @@ public class InputManager : MonoBehaviour
         defaultActions.Disable();
     }
 
-    private void OnMenuCalled(){
+    private void OnMenuCalled()
+    {
         PlayerMotor.UnlockCursor();
         SceneManager.LoadSceneAsync(0);
     }
