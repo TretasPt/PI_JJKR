@@ -1294,6 +1294,10 @@ PrefabInstance:
       propertyPath: Floor
       value: 
       objectReference: {fileID: 725304840}
+    - target: {fileID: 3243382487450450012, guid: 745facf73ce43994989f8f8a0e2118ac, type: 3}
+      propertyPath: reloadKey
+      value: 114
+      objectReference: {fileID: 0}
     - target: {fileID: 7109559562428624438, guid: 745facf73ce43994989f8f8a0e2118ac, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
