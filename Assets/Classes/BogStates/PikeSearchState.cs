@@ -45,7 +45,6 @@ public class PikeSearchState : State
     private void spawnPikeCluster()
     {
         currentCluster++;
-        Debug.Log(currentCluster % pikeClusters.Length);                        //TODO Delete
         if (currentCluster >= pikeClusters.Length)
         {
             pikeClusters[currentCluster % pikeClusters.Length].GetComponent<PikeCluster>().markDestroy();             //TODO só destroi o primeiro elemento

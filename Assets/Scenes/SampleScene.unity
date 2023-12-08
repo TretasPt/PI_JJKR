@@ -417,8 +417,8 @@ MonoBehaviour:
   ATTRIBUTE_friction: 1.9
   COOLDOWN_out_of_range_end: 10
   COOLDOWN_attack: 2
-  COOLDOWN_empty_search_end: 10
-  COOLDOWN_empty_search_next_directon: 2
+  COOLDOWN_empty_search_end: 20
+  COOLDOWN_empty_search_next_directon: 0.5
   COOLDOWN_pike_search_end: 10
   PREFAB_pikePrefab: {fileID: 6258553920967109008, guid: e2369b59557172f4b8c67f0e8254ab7d, type: 3}
 --- !u!1 &366352816
