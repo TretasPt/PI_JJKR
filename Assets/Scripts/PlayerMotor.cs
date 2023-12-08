@@ -10,7 +10,7 @@ public class PlayerMotor : MonoBehaviour
     [HideInInspector]
     public static Action shootInput;
     public static Action reloadInput;
-    
+
     private CharacterController controller;
     [SerializeField] private Vector3 playerVelocity;
     [SerializeField] public bool airMovement = false;
@@ -21,7 +21,9 @@ public class PlayerMotor : MonoBehaviour
     [SerializeField] public float airMovementScaling = 0.4f;
     [SerializeField] private KeyCode reloadKey;
     private bool isGrounded;
-    
+
+    public GameObject Floor;
+
 
 
     // Start is called before the first frame update
@@ -30,6 +32,33 @@ public class PlayerMotor : MonoBehaviour
         LockCursor();
         controller = GetComponent<CharacterController>();
         controller.detectCollisions = false; //temp
+
+        bool isFreePosition = false;
+        while (!isFreePosition)
+        {
+
+            isFreePosition = ResetPlayerPosition();
+        }
+    }
+
+    private bool ResetPlayerPosition()
+    {
+        // Debug.Log("Setting player position.");
+        float x = (float)RandomVariables.NormalBounded(0,5,-10,10);
+        float z = (float)RandomVariables.NormalBounded(0,5,-10,10);
+        GetComponent<CharacterController>().enabled = false;
+        Vector3 position = Vector3.up + Floor.GetComponent<TerrainGenerator>().getGroundHeight(new Vector3(x,0,z));
+        transform.SetPositionAndRotation(position, Quaternion.identity);
+        GetComponent<CharacterController>().enabled = true;
+
+        foreach (var collider in Physics.OverlapCapsule(position + new Vector3(0, -5, 0), position + new Vector3(0, 5, 0), 2))
+        {
+            if (collider.gameObject.CompareTag("Tree"))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     // Update is called once per frame
@@ -56,7 +85,7 @@ public class PlayerMotor : MonoBehaviour
             playerVelocity.x /= friction;
             playerVelocity.z /= friction;
         }
-        
+
         if (isGrounded && playerVelocity.y < 0)
         {
             playerVelocity.y = -2f;
@@ -97,6 +126,21 @@ public class PlayerMotor : MonoBehaviour
     {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Hit something T.");
+
+    }
+    void OnCollisionEnter(Collision collision)
+    {
+        // ContactPoint contact = collision.contacts[0];
+        // Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contact.normal);
+        // Vector3 position = contact.point;
+        // Instantiate(explosionPrefab, position, rotation);
+        // Destroy(gameObject);
+        Debug.Log("Hit something.");
     }
 
 }
