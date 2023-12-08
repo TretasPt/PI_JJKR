@@ -45,19 +45,19 @@ public class PikeSearchState : State
     private void spawnPikeCluster()
     {
         currentCluster++;
-        if (currentCluster == pikeClusters.Length)
+        Debug.Log(currentCluster % pikeClusters.Length);                        //TODO Delete
+        if (currentCluster >= pikeClusters.Length)
         {
-            currentCluster = 0;
-            pikeClusters[currentCluster].GetComponent<PikeCluster>().destroy();             //TODO só destroi o primeiro elemento
+            pikeClusters[currentCluster % pikeClusters.Length].GetComponent<PikeCluster>().markDestroy();             //TODO só destroi o primeiro elemento
         }
-        pikeClusters[currentCluster] = new GameObject();
-        pikeClusters[currentCluster].AddComponent<PikeCluster>();
-        pikeClusters[currentCluster].GetComponent<PikeCluster>().init(bog);
+        pikeClusters[currentCluster % pikeClusters.Length] = new GameObject();
+        pikeClusters[currentCluster % pikeClusters.Length].AddComponent<PikeCluster>();
+        pikeClusters[currentCluster % pikeClusters.Length].GetComponent<PikeCluster>().init(bog);
     }
 
     private void followLatestPike()
     {
-        Vector3 vectorToDestination = pikeClusters[currentCluster].GetComponent<PikeCluster>().getLatestPikePosition() - bog.transform.position;
+        Vector3 vectorToDestination = pikeClusters[currentCluster % pikeClusters.Length].GetComponent<PikeCluster>().getLatestPikePosition() - bog.transform.position;
         bog.setDestinationVector(vectorToDestination);
     }
 }

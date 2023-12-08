@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -25,12 +26,14 @@ public class PikeCluster : MonoBehaviour
 
     private float heightIterator;
 
+    private bool toDestroy = false;
+
     public void init(Bog bog)
     {
         this.bog = bog;
         target = GameObject.FindGameObjectsWithTag("Player")[0];
         spawn = new GameObject();
-        spawn.transform.position = bog.transform.position + bog.ATTRIBUTE_initial_pike_spawn_distance*bog.transform.forward;
+        spawn.transform.position = bog.transform.position + bog.ATTRIBUTE_initial_pike_spawn_distance*(target.transform.position - bog.transform.position).normalized;
         spawn.transform.rotation = bog.transform.rotation;
         pikes = new GameObject[bog.ATTRIBUTE_pike_cluster_capacity];
         growCapacity = bog.ATTRIBUTE_pike_cluster_capacity;
@@ -42,6 +45,12 @@ public class PikeCluster : MonoBehaviour
     void Start()
     {
         StartCoroutine(growRoutine());
+    }
+
+    void Update()
+    {
+        if (toDestroy)
+            destroy();
     }
 
     private IEnumerator growRoutine()
@@ -65,9 +74,9 @@ public class PikeCluster : MonoBehaviour
 
     private void setRotation()
     {
-        float rotateX = Random.Range(0,10);      //TODO
-        float rotateY = Random.Range(-bog.ATTRIBUTE_maximum_pike_spawn_pivot_angle, bog.ATTRIBUTE_maximum_pike_spawn_pivot_angle);
-        float rotateZ = Random.Range(-15,15);      //TODO
+        float rotateX = UnityEngine.Random.Range(0,10);      //TODO
+        float rotateY = UnityEngine.Random.Range(-bog.ATTRIBUTE_maximum_pike_spawn_pivot_angle, bog.ATTRIBUTE_maximum_pike_spawn_pivot_angle);
+        float rotateZ = UnityEngine.Random.Range(-15,15);      //TODO
         float rotationToTarget = spawn.transform.rotation.y + Vector3.SignedAngle(Vector3.forward, target.transform.position - spawn.transform.position, Vector3.up);
         spawn.transform.rotation = Quaternion.Euler(0,rotationToTarget + rotateY,0);
         individualRotation = Quaternion.Euler(rotateX, rotationToTarget + rotateY, rotateZ);
@@ -86,13 +95,27 @@ public class PikeCluster : MonoBehaviour
         return pikes[growCapacity].transform.position;
     }
 
-    public void destroy()
+    public void markDestroy()
     {
+        toDestroy = true;
+    }
+
+    private void destroy()
+    {
+        StartCoroutine(destroyRoutine());
+    }
+
+    private IEnumerator destroyRoutine()
+    {
+        for (int i = 0; i < pikes.Length; i++)
+            pikes[growCapacity].GetComponent<Animator>().SetBool("Activate", false);
+        
+        yield return new WaitForSeconds(bog.ATTRIBUTE_pike_spawn_time*bog.ATTRIBUTE_pike_cluster_capacity);
+        
         for (int i = 0; i < pikes.Length; i++)
             Destroy(pikes[i]);
         Destroy(gameObject);
     }
-
 
     /*
     TODO 
