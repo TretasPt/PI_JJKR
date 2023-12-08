@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class InputManager : MonoBehaviour
 {
@@ -21,6 +22,9 @@ public class InputManager : MonoBehaviour
         motor = GetComponent<PlayerMotor>();
         look = GetComponent<PlayerLook>();
         defaultActions.Jump.performed += ctx => motor.Jump();
+        defaultActions.Menu.performed += ctx => OnMenuCalled();
+        defaultActions.Flashlight.performed += ctx => OnMenuCalled();
+
     }
 
     // Update is called once per frameES
@@ -48,5 +52,10 @@ public class InputManager : MonoBehaviour
     private void OnDisable()
     {
         defaultActions.Disable();
+    }
+
+    private void OnMenuCalled(){
+        PlayerMotor.UnlockCursor();
+        SceneManager.LoadSceneAsync(0);
     }
 }
