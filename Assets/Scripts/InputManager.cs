@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class InputManager : MonoBehaviour
 
     private PlayerMotor motor;
     private PlayerLook look;
+    
 
     // Start is called before the first frame update
     void Awake()
@@ -21,15 +23,21 @@ public class InputManager : MonoBehaviour
         defaultActions.Jump.performed += ctx => motor.Jump();
     }
 
-    // Update is called once per frame
+    // Update is called once per frameES
     void FixedUpdate()
     {
         motor.ProcessMove(defaultActions.Movement.ReadValue<Vector2>());
+        motor.ProcessShoot();
     }
 
     void LateUpdate()
     {
-        look.ProcessLook(defaultActions.Look.ReadValue<Vector2>());
+        if (defaultActions.Look.activeControl != null)
+        {
+            int multiplier = defaultActions.Look.activeControl.device.ToString() == "Mouse:/Mouse" ? 1 : 6;
+            look.ProcessLook(defaultActions.Look.ReadValue<Vector2>() * multiplier);
+        }
+
     }
 
     private void OnEnable()

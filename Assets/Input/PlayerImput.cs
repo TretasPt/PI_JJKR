@@ -284,6 +284,8 @@ public partial class @PlayerImput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Default_Movement;
     private readonly InputAction m_Default_Jump;
     private readonly InputAction m_Default_Look;
+    private readonly InputAction m_Default_Mouse;
+    
     public struct DefaultActions
     {
         private @PlayerImput m_Wrapper;
