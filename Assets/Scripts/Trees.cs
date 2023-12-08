@@ -162,9 +162,9 @@ public class Trees : MonoBehaviour
             int lastProp = (int)(placeThisCicle * treeRatio);
             for (int i = 0; i != placeThisCicle; i++)
             {
-                double mean = RandomVariables.Uniform(5f,50f);
-                double sDeviation = RandomVariables.Uniform(1f,50f);
-                Vector2 propLocation = GeneratePropLocation(mean,sDeviation);
+                double mean = RandomVariables.Uniform(5f, 50f);
+                double sDeviation = RandomVariables.Uniform(1f, 50f);
+                Vector2 propLocation = GeneratePropLocation(mean, sDeviation);
 
                 GameObject currentObject = PlaceProp(PolarToCartesian(propLocation), Quaternion.identity, clusterParent.transform, i < lastProp);
 
@@ -261,7 +261,7 @@ public class Trees : MonoBehaviour
         // Debug.Log("New Position: " + newPosition + " NewY: " + newY);
         tree.transform.localScale = new Vector3(TreeScale, TreeScale, TreeScale);
         tree.name = "Tree";
-        tree.tag="Tree";
+        tree.tag = "Tree";
 
         return tree;
     }
@@ -332,7 +332,7 @@ public class Trees : MonoBehaviour
         while (generatedTree == null)
         {
             //If a relevant colision is detected.
-            foreach (var collider in Physics.OverlapCapsule(clusterParent.transform.position, clusterParent.transform.position + new Vector3(0, maintTreeHeightMultiplier, 0), maintTreeWidthMultiplier))
+            foreach (var collider in Physics.OverlapCapsule(clusterParent.transform.position, clusterParent.transform.position + new Vector3(0, maintTreeHeightMultiplier * 10, 0), maintTreeWidthMultiplier * 1))
             {
                 if (collider.gameObject.CompareTag("Tree"))
                 {
@@ -365,7 +365,7 @@ public class Trees : MonoBehaviour
     /// Generates the polar coordinates of a new prop.
     /// </summary>
     /// <returns>A vector containing the angle as the x and the radious as the y.</returns>
-    private static Vector2 GeneratePropLocation(double mean = 50, double sDeviation =20)
+    private static Vector2 GeneratePropLocation(double mean = 50, double sDeviation = 20)
     {
         float angle = (float)RandomVariables.Uniform(0f, 2 * Mathf.PI);
         float radious = (float)RandomVariables.NormalBounded(mean, sDeviation, 0, 200);
