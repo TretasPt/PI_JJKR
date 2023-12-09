@@ -1,4 +1,6 @@
 using System;
+using Unity.VisualScripting;
+
 // using System.Collections;
 // using System.Collections.Generic;
 // using Unity.VisualScripting;
@@ -160,7 +162,9 @@ public class Trees : MonoBehaviour
             int lastProp = (int)(placeThisCicle * treeRatio);
             for (int i = 0; i != placeThisCicle; i++)
             {
-                Vector2 propLocation = GeneratePropLocation();
+                double mean = RandomVariables.Uniform(5f, 50f);
+                double sDeviation = RandomVariables.Uniform(1f, 50f);
+                Vector2 propLocation = GeneratePropLocation(mean, sDeviation);
 
                 GameObject currentObject = PlaceProp(PolarToCartesian(propLocation), Quaternion.identity, clusterParent.transform, i < lastProp);
 
@@ -249,14 +253,15 @@ public class Trees : MonoBehaviour
         }
 
         //Generate newPosition based on terrain height
-        float newY = terrain.SampleHeight(new Vector3(position.x, 0, position.z));
-        Vector3 newPosition = new Vector3(position.x, newY, position.z);
+        // float newY = terrain.SampleHeight(new Vector3(position.x, 0, position.z));
+        // Vector3 newPosition = new Vector3(position.x, newY, position.z);
+        Vector3 newPosition = Floor.GetComponent<TerrainGenerator>().getGroundHeight(new Vector3(position.x, 0, position.z)) + new Vector3(0, -0.2f, 0);
 
         GameObject randomTree = choseRandomTree();
         GameObject tree = Instantiate(randomTree, newPosition, rotation, parentCluster);
-        // Debug.Log("New Position: " + newPosition + " NewY: " + newY);
         tree.transform.localScale = new Vector3(TreeScale, TreeScale, TreeScale);
         tree.name = "Tree";
+        tree.tag = "Tree";
 
         return tree;
     }
@@ -283,13 +288,16 @@ public class Trees : MonoBehaviour
             return null;
 
         //Generate newPosition based on terrain height
-        float newY = terrain.SampleHeight(new Vector3(position.x, 0, position.z));
-        Vector3 newPosition = new Vector3(position.x, newY, position.z);
+        // float newY = terrain.SampleHeight(new Vector3(position.x, 0, position.z));
+        // Vector3 newPosition = new Vector3(position.x, newY, position.z);
+        Vector3 newPosition = Floor.GetComponent<TerrainGenerator>().getGroundHeight(new Vector3(position.x, 0, position.z));// + new Vector3(0, -0.2f, 0);
+
 
         GameObject randomBush = choseRandomBush();
         GameObject bush = Instantiate(randomBush, newPosition, rotation, parentCluster);
         bush.transform.localScale = new Vector3(BushScale, BushScale, BushScale);
         bush.name = "Bush";
+        bush.tag = "Bush";
 
         return bush;
     }
@@ -359,11 +367,10 @@ public class Trees : MonoBehaviour
     /// Generates the polar coordinates of a new prop.
     /// </summary>
     /// <returns>A vector containing the angle as the x and the radious as the y.</returns>
-    private static Vector2 GeneratePropLocation()
+    private static Vector2 GeneratePropLocation(double mean = 50, double sDeviation = 20)
     {
         float angle = (float)RandomVariables.Uniform(0f, 2 * Mathf.PI);
-        //TODO Make random - use normal. Generate mean
-        float radious = (float)RandomVariables.NormalBounded(50, 20, 0, 200);
+        float radious = (float)RandomVariables.NormalBounded(mean, sDeviation, 0, 200);
         return new Vector2(angle, radious);
     }
 
@@ -387,6 +394,7 @@ public class Trees : MonoBehaviour
     {
         return Resources.Load<GameObject>("Bush_" + RandomVariables.Uniform(0, numBushesInResources));
     }
+
 
 }
 
