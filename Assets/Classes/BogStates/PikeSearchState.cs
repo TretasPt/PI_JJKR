@@ -26,16 +26,20 @@ public class PikeSearchState : State
 
     public void start()
     {
+        bog.setAgressive(false);
         COOLDOWN_end.setStart();
         spawnPikeCluster();
+        bog.GetComponent<AnimationManager>().cast();
     }
 
     public void update()
     {
         COOLDOWN_end.count();
         if (COOLDOWN_end.done())
+        {
             bog.setState(Bog.STATE_EMPTY_SEARCH);
-        followLatestPike();
+        }
+        followPike();
 
         bog.checkRange();
         bog.look();
@@ -54,9 +58,9 @@ public class PikeSearchState : State
         pikeClusters[currentCluster % pikeClusters.Length].GetComponent<PikeCluster>().init(bog);
     }
 
-    private void followLatestPike()
+    private void followPike()
     {
-        Vector3 vectorToDestination = pikeClusters[currentCluster % pikeClusters.Length].GetComponent<PikeCluster>().getLatestPikePosition() - bog.transform.position;
+        Vector3 vectorToDestination = pikeClusters[currentCluster % pikeClusters.Length].GetComponent<PikeCluster>().getPikePosition() - bog.transform.position;
         bog.setDestinationVector(vectorToDestination);
     }
 }

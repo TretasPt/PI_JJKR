@@ -37,6 +37,8 @@ public class Bog : MonoBehaviour
     public float COOLDOWN_pike_search_end; 
 
     public GameObject PREFAB_pikePrefab;
+    
+    public Collider hand;
 
     private GameObject target;
 
@@ -50,6 +52,8 @@ public class Bog : MonoBehaviour
 
     private Vector3 velocity;
 
+    private float currentSpeed;
+
     void Awake()
     {
         target = GameObject.FindGameObjectsWithTag("Player")[0];
@@ -58,7 +62,6 @@ public class Bog : MonoBehaviour
             new EmptySearchState(this),
             new PikeSearchState(this),
             new PersuingState(this),
-            new OutOfRangeState(this)
         };
         setState(STATE_EMPTY_SEARCH);
     }
@@ -89,7 +92,9 @@ public class Bog : MonoBehaviour
     }
     public void move()
     {
-        velocity += destinationVector.normalized * ATTRIBUTE_walk_speed;             // TODO Aplicar current speed
+        if ((target.transform.position - transform.position).magnitude > 5)
+
+        velocity += destinationVector.normalized * currentSpeed;
         velocity.x /= ATTRIBUTE_friction;
         velocity.z /= ATTRIBUTE_friction;
         velocity.y += gravity * Time.deltaTime;
@@ -102,11 +107,15 @@ public class Bog : MonoBehaviour
     }
     public void attack()
     {
-        GetComponent<AnimationManager>();               //TODO Implementar
+        if ((target.transform.position - transform.position).magnitude < 7)
+        {
+            GetComponent<AnimationManager>().attack();
+            hand.enabled = true;
+        }
     }
-    public void teleport()
+    public void clearObstacles()
     {
-                                                    //TODO Implementar
+        //TODO
     }
 
     //  /\
@@ -131,6 +140,15 @@ public class Bog : MonoBehaviour
             ATTRIBUTE_vision_radious,
             1 << target.gameObject.layer
         );
+    }
+
+    public void setAgressive(bool isAgressive)
+    {
+        if (isAgressive)
+            currentSpeed = ATTRIBUTE_run_speed;
+        else
+            currentSpeed = ATTRIBUTE_walk_speed;
+
     }
 
     public void setState(int newState)

@@ -12,8 +12,6 @@ public class PersuingState : State
 
     private Cooldown COOLDOWN_attack;
 
-    private Cooldown COOLDOWN_run;                      //TODO Isto é para quê?
-
     public PersuingState(Bog bog)
     {
         this.bog = bog;
@@ -22,6 +20,7 @@ public class PersuingState : State
 
     public void start()
     {
+        bog.setAgressive(true);
         COOLDOWN_attack.setStart();
     }
 
@@ -35,13 +34,8 @@ public class PersuingState : State
         }
 
         bog.checkRange();
-        bog.look();
+        //bog.look();
         bog.persue();
         bog.move();
-    }
-
-    private void setDestination()
-    {
-
     }
 }

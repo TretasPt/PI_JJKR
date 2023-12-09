@@ -75,6 +75,7 @@ public class PlayerMotor : MonoBehaviour
 
     public void ProcessShoot()
     {
+        Debug.Log("Bang Bang");
         //Chekcs if left mouse button is being pressed
         if (Input.GetMouseButton(0))
         {

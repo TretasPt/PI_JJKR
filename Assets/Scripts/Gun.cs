@@ -33,6 +33,7 @@ public class Gun : MonoBehaviour
         //Can Shoot
         if (CanShoot())
         {
+            Debug.Log("Bang Bang");
             Vector3 randomizedDirecition = ShootingTarget();
             Vector3 origin = transform.position + transform.forward.normalized * 2;
             //controller.detectCollisions = false;

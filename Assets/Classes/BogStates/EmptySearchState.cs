@@ -25,6 +25,7 @@ public class EmptySearchState : State
 
     public void start()
     {
+        bog.setAgressive(false);
         COOLDOWN_end.setStart();
         COOLDOWN_nextDirection.setStart();
         maxAngleToDestination = bog.ATTRIBUTE_maximum_empty_search_pivot_angle;

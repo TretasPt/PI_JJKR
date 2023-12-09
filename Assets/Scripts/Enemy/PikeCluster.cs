@@ -73,6 +73,8 @@ public class PikeCluster : MonoBehaviour
         pikeParent.transform.position = individualPosition;
         pikeParent.transform.rotation = individualRotation;
         pikes[--growCapacity] = Instantiate(bog.PREFAB_pikePrefab, new Vector3(0,0,0), Quaternion.Euler(0,0,0), pikeParent.transform);
+        pikes[growCapacity].GetComponent<Pike>().bog = bog;                                                                              //TODO Correto?
+        pikes[growCapacity].GetComponent<Pike>().player = target;
         pikes[growCapacity].GetComponent<Animator>().SetBool("Activate", true);
         yield return new WaitForSeconds(bog.ATTRIBUTE_pike_spawn_time);
     }
@@ -96,7 +98,7 @@ public class PikeCluster : MonoBehaviour
         heightIterator -= 2f / bog.ATTRIBUTE_pike_cluster_capacity;                                                         //TODO hardcoded
     }
 
-    public Vector3 getLatestPikePosition()
+    public Vector3 getPikePosition()
     {
         return pikes[growCapacity].transform.position;
     }
