@@ -9,8 +9,8 @@ public class PlayerLook : MonoBehaviour
     public Camera cam;
     private float yRotation = 0f;
 
-    public float xSensitivity = 30f;
-    public float ySensitivity = 30f;
+    public static float xSensitivity = 30f;
+    public static float ySensitivity = 30f;
 
     public void ProcessLook(Vector2 input)
     {
@@ -30,6 +30,17 @@ public class PlayerLook : MonoBehaviour
         Light light = transform.GetChild(0).GetChild(1).GetComponentInChildren<Light>();
         light.enabled = !light.enabled;
         // Debug.Log(light.enabled);
+    }
+
+    public static Vector2 getSensitivi2D()
+    {
+        return new Vector2(xSensitivity, ySensitivity);
+    }
+
+    public static void setSensitivity2D(Vector2 sensitivity2D)
+    {
+        xSensitivity = sensitivity2D.x;
+        ySensitivity = sensitivity2D.y;
     }
 
 }

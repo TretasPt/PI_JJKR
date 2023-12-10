@@ -12,8 +12,7 @@ public class InputManager : MonoBehaviour
 
     private PlayerMotor motor;
     private PlayerLook look;
-
-
+    
     // Start is called before the first frame update
     void Awake()
     {
@@ -36,7 +35,7 @@ public class InputManager : MonoBehaviour
 
     void LateUpdate()
     {
-        if (defaultActions.Look.activeControl != null)
+        if (defaultActions.Look.activeControl != null && !GameMenu.optionsMenuState)
         {
             int multiplier = defaultActions.Look.activeControl.device.ToString() == "Mouse:/Mouse" ? 1 : 6;
             look.ProcessLook(defaultActions.Look.ReadValue<Vector2>() * multiplier);
@@ -56,7 +55,6 @@ public class InputManager : MonoBehaviour
 
     private void OnMenuCalled()
     {
-        PlayerMotor.UnlockCursor();
-        SceneManager.LoadSceneAsync(0);
+        GameMenu.switchGameMenu();
     }
 }
