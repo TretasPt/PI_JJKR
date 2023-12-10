@@ -46,6 +46,7 @@ public class EmptySearchState : State
 
         bog.look();
         bog.move();
+        bog.checkHealth();
     }
 
     private void setNextDirection()

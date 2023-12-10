@@ -35,5 +35,6 @@ public class PersuingState : State
 
         bog.persue();
         bog.move();
+        bog.checkHealth();
     }
 }

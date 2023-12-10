@@ -138,22 +138,11 @@ public class PlayerMotor : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider collider)
     {
-        Debug.Log("Hit something T.");
-        if (other.gameObject.tag == "BogHand")
+        if (collider.gameObject.tag == "BogHand")
             GetComponent<PlayerStats>().applyDamage(5);
-        else if (other.gameObject.tag == "Pike")
+        else if (collider.gameObject.tag == "Pike")
             bog.setState(Bog.STATE_PERSUING);
     }
-    void OnCollisionEnter(Collision collision)
-    {
-        // ContactPoint contact = collision.contacts[0];
-        // Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contact.normal);
-        // Vector3 position = contact.point;
-        // Instantiate(explosionPrefab, position, rotation);
-        // Destroy(gameObject);
-        Debug.Log("Hit something.");
-    }
-
 }

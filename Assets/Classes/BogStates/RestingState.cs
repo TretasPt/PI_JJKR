@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class AreaClearState : State
+public class RestingState : State
 {
     private Bog bog;
 
     private Cooldown COOLDOWN_end;
 
-    public AreaClearState(Bog bog)
+    public RestingState(Bog bog)
     {
         this.bog = bog;
-        COOLDOWN_end = new Cooldown(3);
+        COOLDOWN_end = new Cooldown(10);
+        bog.GetComponent<AnimationManager>().rest();
     }
 
     public void start()
@@ -26,7 +27,12 @@ public class AreaClearState : State
 
     public void update()
     {
-        //bog.GetComponent<Animator>().GetCurrentAnimatorStateInfo();           Isto pode dar informacao sobre em qual animacao está ???
-
+        COOLDOWN_end.count();
+        if (COOLDOWN_end.done())
+        {
+            bog.heal();
+            bog.GetComponent<AnimationManager>().wakeup();
+            bog.setState(Bog.STATE_EMPTY_SEARCH);
+        }
     }
 }

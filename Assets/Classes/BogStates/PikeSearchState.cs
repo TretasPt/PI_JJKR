@@ -43,6 +43,7 @@ public class PikeSearchState : State
         
         bog.look();
         bog.move();
+        bog.checkHealth();
     }
 
     private void spawnPikeCluster()

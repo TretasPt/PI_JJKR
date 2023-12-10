@@ -36,7 +36,7 @@ public class Bullet : MonoBehaviour
 
         if (hit && distanceToBullet > distanceToEnemy)
         {
-            bog.GetComponent<Bog>().takeDamage();
+            bog.GetComponent<Bog>().applyDamage();
 
             Destroy(gameObject);
         }

@@ -8,7 +8,7 @@ public class AnimationManager : MonoBehaviour
 
     void Update()
     {
-        animator.SetFloat("Speed", GetComponent<CharacterController>().velocity.magnitude);
+        animator.SetFloat("Speed", GetComponent<CharacterController>().velocity.magnitude);     //TODO Mudar
     }
 
     public void cast()
@@ -19,5 +19,15 @@ public class AnimationManager : MonoBehaviour
     public void attack()
     {
         animator.SetTrigger("Attack");
+    }
+
+    public void rest()
+    {
+        animator.SetBool("Resting", true);
+    }
+
+    public void wakeup()
+    {
+        animator.SetBool("Resting", true);
     }
 }

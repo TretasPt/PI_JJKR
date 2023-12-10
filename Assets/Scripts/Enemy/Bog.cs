@@ -13,7 +13,7 @@ public class Bog : MonoBehaviour
     [NonSerialized] public const int STATE_EMPTY_SEARCH = 0;
     [NonSerialized] public const int STATE_PIKE_SEARCH = 1;
     [NonSerialized] public const int STATE_PERSUING = 2;
-    [NonSerialized] public const int STATE_OUT_OF_RANGE = 3;
+    [NonSerialized] public const int STATE_RESTING = 3;
 
     [NonSerialized] private const float gravity = -20f;
 
@@ -56,21 +56,25 @@ public class Bog : MonoBehaviour
 
     private float currentSpeed;
 
+    private int health;
+
     void Awake()
     {
+        health = ATTRIBUTE_health;
         target = GameObject.FindGameObjectsWithTag("Player")[0];
         states = new State[]
         {
             new EmptySearchState(this),
             new PikeSearchState(this),
             new PersuingState(this),
+            new RestingState(this)
         };
         setState(STATE_EMPTY_SEARCH);
+
     }
 
     void Update()
     {
-        checkHealth();
         states[state].update();
     }
 
@@ -125,7 +129,6 @@ public class Bog : MonoBehaviour
 
     private bool targetVisible()
     {
-        if (targetWithinVision() && targetInFront())
         targetVector = target.transform.position - transform.position;
         return targetWithinVision() && targetInFront();
     }
@@ -142,10 +145,15 @@ public class Bog : MonoBehaviour
         return false;
     }
 
-    private void checkHealth()
+    public void checkHealth()
     {
-        if (ATTRIBUTE_health < 1)
-            GetComponent<Animator>().SetTrigger("Attack");
+        if (health < 1)
+            setState(Bog.STATE_RESTING);
+    }
+
+    public void heal()
+    {
+        health = ATTRIBUTE_health;
     }
 
     public void setAgressive(bool isAgressive)
@@ -157,9 +165,9 @@ public class Bog : MonoBehaviour
 
     }
 
-    public void takeDamage()
+    public void applyDamage()
     {
-        ATTRIBUTE_health--;
+        health--;
     }
 
     public void setState(int newState)
