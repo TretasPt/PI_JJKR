@@ -140,23 +140,23 @@ public class RandomVariables : MonoBehaviour
 
 
         DistributionTesterStructure[] generators = {
-            // new("Test",()=>"0",5),
-            // new("uniformTest0",() => Uniform(0f, 2f).ToString(),10),
+            // new("",()=>""),
 
-            new("ChooseBushType", ()=>Uniform(0, 5).ToString()),
             new("ChooseTreeType", ()=>Uniform(0, 10).ToString()),
-            new("ChoseXOrZToPositionCluster", ()=>Uniform(-256.5f, 256.5f).ToString()),
-            new("PolarPropAngle",()=>Uniform(0f, 2 * Mathf.PI).ToString()),
+            new("ChooseBushType", ()=>Uniform(0, 5).ToString()),
+
+
             new("GenerateNumberOfClusters", ()=>Uniform(5, 20).ToString()),
+            new("ChoseXOrZToPositionCluster", ()=>Uniform(-256.5f, 256.5f).ToString()),
             new("GenerateClusterMean",()=>Uniform(5f, 50f).ToString()),
+            new("PolarPropAngle",()=>Uniform(0f, 2 * Mathf.PI).ToString()),
             new("GenerateClusterStandardDeviation",()=>Uniform(1f, 50f).ToString()),
             new("ChosePerlinNoiseOffset", ()=>Uniform(0f, 100000f).ToString()),
+
             new("ResetPlayerPosition", ()=> NormalBounded(0,5,-10,10).ToString()),
-            new("RandomizeShoot",()=>Normal(0f, 0.015f).ToString())
+            new("RandomizeShoot",()=>Normal(0f, 0.015f).ToString()),
             
             //new("PolarPropRadious", NormalBounded(mean, sDeviation, 0, 200).ToString()),
-
-
         };
 
 
@@ -171,35 +171,7 @@ public class RandomVariables : MonoBehaviour
 
         Debug.Log("Finished generating random variables to files.");
 
-
-
-        // string[] s = { 3f.ToString(), 3f.ToString() };
-
-        // Func<string[]> sa = () => new string[] {};
-
-        // Func<string[]>[] funcs = {
-        //     () => 3f.ToString(),
-        //     () => Uniform(0f, 2f).ToString(),
-        //     () => Uniform(0f, 10f).ToString()
-        //     };
-
-        // foreach (var generator in funcs)
-        // {
-
-        //     // using (StreamWriter writer = new StreamWriter(fullPath))
-        //     // {
-        //     //     writer.WriteLine("Monica Rathbun");
-        //     //     writer.WriteLine("Vidya Agarwal");
-        //     //     writer.WriteLine("Mahesh Chand");
-        //     //     writer.WriteLine("Vijay Anand");
-        //     //     writer.WriteLine("Jignesh Trivedi");
-        //     // }
-        // }
-
     }
 
-    // public void Start(){
-    //     testDistributions();
-    // }
 
 }

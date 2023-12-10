@@ -80,3 +80,5 @@ crashlytics-build.properties
 Assets/Terrains/Terrain.asset
 ThingsThatShouldBeOutside/*.csv
 ThingsThatShouldBeOutside/*.xlsx
+ThingsThatShouldBeOutside/Nova pasta/Discretas.xlsx
+ThingsThatShouldBeOutside/Nova pasta/Normais.xlsx
