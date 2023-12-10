@@ -145,7 +145,6 @@ public class RandomVariables : MonoBehaviour
             new("ChooseTreeType", ()=>Uniform(0, 10).ToString()),
             new("ChooseBushType", ()=>Uniform(0, 5).ToString()),
 
-
             new("GenerateNumberOfClusters", ()=>Uniform(5, 20).ToString()),
             new("ChoseXOrZToPositionCluster", ()=>Uniform(-256.5f, 256.5f).ToString()),
             new("GenerateClusterMean",()=>Uniform(5f, 50f).ToString()),
@@ -155,17 +154,26 @@ public class RandomVariables : MonoBehaviour
 
             new("ResetPlayerPosition", ()=> NormalBounded(0,5,-10,10).ToString()),
             new("RandomizeShoot",()=>Normal(0f, 0.015f).ToString()),
-            
-            //new("PolarPropRadious", NormalBounded(mean, sDeviation, 0, 200).ToString()),
+
+            new("SpikesXInclination",()=>Uniform(0f,10f).ToString()),
+            new("SpikesZInclination",()=>Uniform(-15f,15f).ToString()),
+            new("SpikesChaseDirection",()=>Arcsine(-40f,40f).ToString()),
+            new("EnemyChaseDirection",()=>NormalBounded(0f,70f,-50f,50f).ToString()),
+
+            new("PolarPropRadiousExample",()=>NormalBounded(25f, 25f, 0f, 200f).ToString()),
+
+
+
         };
 
 
         foreach (DistributionTesterStructure generator in generators)
         {
             using StreamWriter writer = new("./ThingsThatShouldBeOutside/" + generator.Name + ".csv");
-            for (int i = 0; i < generator.Iterations; i++)
+            writer.Write(generator.Generator());
+            for (int i = 1; i < generator.Iterations; i++)
             {
-                writer.Write(generator.Generator() + ";");
+                writer.Write(";" + generator.Generator());
             }
         }
 
