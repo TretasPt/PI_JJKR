@@ -1450,6 +1450,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 442915749}
   m_SourcePrefab: {fileID: 100100000, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+--- !u!1 &1420943543 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1694449805434718, guid: 6f1a7354265853f44b0ed5e2e43676ad, type: 3}
+  m_PrefabInstance: {fileID: 1278982460}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1440013734
 GameObject:
   m_ObjectHideFlags: 0
@@ -1748,6 +1753,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gunData: {fileID: 11400000, guid: 8f439dd3fb85a3e6284ff28d6f0e045d, type: 2}
   bulletHole: {fileID: 2964481797003290971, guid: 81a5613f1abf20f8b91962314b4f50d4, type: 3}
+  gun: {fileID: 1420943543}
 --- !u!1 &1820797510
 GameObject:
   m_ObjectHideFlags: 0
@@ -1995,7 +2001,8 @@ MonoBehaviour:
   gravity: -9.8
   jumpHeight: 1
   airMovementScaling: 0.4
-  reloadKey: 0
+  reloadKey: 114
+  Floor: {fileID: 725304840}
 --- !u!114 &2121204575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2172,10 +2179,10 @@ PrefabInstance:
       addedObject: {fileID: 2121204581}
     - targetCorrespondingSourceObject: {fileID: 7376964607596699824, guid: 7468d3994305c9a4aacfbfc648a54310, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2121204593}
+      addedObject: {fileID: 2121204594}
     - targetCorrespondingSourceObject: {fileID: 7376964607596699824, guid: 7468d3994305c9a4aacfbfc648a54310, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2121204594}
+      addedObject: {fileID: 2121204593}
     - targetCorrespondingSourceObject: {fileID: 3445553526691708545, guid: 7468d3994305c9a4aacfbfc648a54310, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2109464059}

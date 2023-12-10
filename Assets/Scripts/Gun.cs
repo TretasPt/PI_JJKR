@@ -9,6 +9,7 @@ public class Gun : MonoBehaviour
     
     [SerializeField] GunData gunData;
     [SerializeField] private GameObject bulletHole;
+    [SerializeField] private GameObject gun;
     private GameObject rootParent;
     private CharacterController controller;
     private float timeSinceLastShot = 0;
@@ -33,13 +34,17 @@ public class Gun : MonoBehaviour
         //Can Shoot
         if (CanShoot())
         {
-            Debug.Log("Bang Bang");
             Vector3 randomizedDirecition = ShootingTarget();
-            Vector3 origin = transform.position + transform.forward.normalized * 2;
+            Vector3 origin = gun.transform.position + Quaternion.Euler(0,180,0)*(gun.transform.forward.normalized * 0.1f);
             //controller.detectCollisions = false;
             if (Physics.Raycast(origin, randomizedDirecition, out RaycastHit hitInfo, gunData.maxDistance))
             {
-                Instantiate(bulletHole, origin + randomizedDirecition.normalized * hitInfo.distance, Quaternion.identity, bulletHoles.transform);
+                GameObject bullet = Instantiate(bulletHole, origin, Quaternion.identity);
+                Bullet bulletComponent = bullet.AddComponent<Bullet>();
+                bulletComponent.origin = origin;
+                bulletComponent.direction = randomizedDirecition;
+                bulletComponent.bullet = bullet;
+                bulletComponent.hit = hitInfo.transform.tag == "Bog";
                 // Debug.Log(hitInfo.collider.gameObject);
             }
             //controller.detectCollisions = true;

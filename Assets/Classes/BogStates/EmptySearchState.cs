@@ -44,7 +44,6 @@ public class EmptySearchState : State
             setNextDirection();
         }
 
-        bog.checkRange();
         bog.look();
         bog.move();
     }

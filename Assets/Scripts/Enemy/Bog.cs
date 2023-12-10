@@ -16,6 +16,7 @@ public class Bog : MonoBehaviour
 
     [NonSerialized] private const float gravity = -20f;
 
+    public int ATTRIBUTE_health;
     public int ATTRIBUTE_maximum_number_of_pike_clusters;
     public int ATTRIBUTE_pike_cluster_capacity;
     public float ATTRIBUTE_initial_pike_spawn_distance;
@@ -68,17 +69,13 @@ public class Bog : MonoBehaviour
 
     void Update()
     {
+        checkHealth();
         states[state].update();
     }
 
     //Actions
     //  \/
 
-    public void checkRange()
-    {
-        if ((transform.position - target.transform.position).magnitude > ATTRIBUTE_out_of_range_distance)
-            setState(STATE_OUT_OF_RANGE);
-    }
     public void look()
     {
         if (state != STATE_PERSUING && targetVisible())
@@ -142,6 +139,12 @@ public class Bog : MonoBehaviour
         );
     }
 
+    private void checkHealth()
+    {
+        if (ATTRIBUTE_health < 1)
+            GetComponent<Animator>().SetTrigger("Attack");
+    }
+
     public void setAgressive(bool isAgressive)
     {
         if (isAgressive)
@@ -149,6 +152,11 @@ public class Bog : MonoBehaviour
         else
             currentSpeed = ATTRIBUTE_walk_speed;
 
+    }
+
+    public void takeDamage()
+    {
+        ATTRIBUTE_health--;
     }
 
     public void setState(int newState)

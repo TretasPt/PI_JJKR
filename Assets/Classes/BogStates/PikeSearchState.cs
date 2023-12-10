@@ -40,8 +40,7 @@ public class PikeSearchState : State
             bog.setState(Bog.STATE_EMPTY_SEARCH);
         }
         followPike();
-
-        bog.checkRange();
+        
         bog.look();
         bog.move();
     }

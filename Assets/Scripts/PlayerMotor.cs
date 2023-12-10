@@ -4,6 +4,8 @@ using System.Collections.Specialized;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.PlasticSCM.Editor.WebApi;
+using UnityEngine.EventSystems;
 
 public class PlayerMotor : MonoBehaviour
 {
@@ -21,6 +23,8 @@ public class PlayerMotor : MonoBehaviour
     [SerializeField] public float airMovementScaling = 0.4f;
     [SerializeField] private KeyCode reloadKey;
     private bool isGrounded;
+
+    private bool lastMouseInput = false;
 
     public GameObject Floor;
 
@@ -104,12 +108,15 @@ public class PlayerMotor : MonoBehaviour
 
     public void ProcessShoot()
     {
-        Debug.Log("Bang Bang");
+        bool mouseInput = Input.GetMouseButton(0);
+
         //Chekcs if left mouse button is being pressed
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && !lastMouseInput)
         {
             shootInput?.Invoke();
         }
+
+        lastMouseInput = mouseInput; 
 
         if (Input.GetKeyDown(reloadKey))
         {

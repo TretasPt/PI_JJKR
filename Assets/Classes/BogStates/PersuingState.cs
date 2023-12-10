@@ -33,8 +33,6 @@ public class PersuingState : State
             bog.attack();
         }
 
-        bog.checkRange();
-        //bog.look();
         bog.persue();
         bog.move();
     }
