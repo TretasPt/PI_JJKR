@@ -13,6 +13,8 @@ public class PlayerMotor : MonoBehaviour
     public static Action shootInput;
     public static Action reloadInput;
 
+    public Bog bog;
+
     private CharacterController controller;
     [SerializeField] private Vector3 playerVelocity;
     [SerializeField] public bool airMovement = false;
@@ -139,7 +141,10 @@ public class PlayerMotor : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Hit something T.");
-
+        if (other.gameObject.tag == "BogHand")
+            GetComponent<PlayerStats>().applyDamage(5);
+        else if (other.gameObject.tag == "Pike")
+            bog.setState(Bog.STATE_PERSUING);
     }
     void OnCollisionEnter(Collision collision)
     {

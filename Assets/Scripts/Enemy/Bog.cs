@@ -6,6 +6,7 @@ using UnityEngine;
 
 using UnityEngine.AI;
 using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem.LowLevel;
 
 public class Bog : MonoBehaviour
 {
@@ -78,9 +79,14 @@ public class Bog : MonoBehaviour
 
     public void look()
     {
-        if (state != STATE_PERSUING && targetVisible())
-            setState(STATE_PERSUING);
-        else if (state == STATE_PERSUING && !targetVisible())
+        bool visible = targetVisible();
+
+        if (state != STATE_PERSUING && visible)
+        {
+            Debug.Log("Is visible? -> " + visible);//-------------------------------------------------------------------------------------
+            setState(STATE_PERSUING);                           //Aqui está o problema!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        }
+        else if (state == STATE_PERSUING && !visible)
             setState(STATE_EMPTY_SEARCH);
     }
     public void persue()
@@ -106,6 +112,7 @@ public class Bog : MonoBehaviour
     {
         if ((target.transform.position - transform.position).magnitude < 7)
         {
+            Debug.Log("Attackingggg");
             GetComponent<AnimationManager>().attack();
             hand.enabled = true;
         }
@@ -120,6 +127,8 @@ public class Bog : MonoBehaviour
 
     private bool targetVisible()
     {
+        if (targetWithinVision() && targetInFront())
+            Debug.Log("Seen 2 !!!");//-------------------------------------------------------------------------------------
         targetVector = target.transform.position - transform.position;
         return targetWithinVision() && targetInFront();
     }
@@ -131,12 +140,9 @@ public class Bog : MonoBehaviour
 
     private bool targetInFront()
     {
-        return Physics.Raycast(
-            transform.position,
-            targetVector,
-            ATTRIBUTE_vision_radious,
-            1 << target.gameObject.layer
-        );
+        if (Physics.Raycast(transform.position, targetVector, out RaycastHit hitInfo, ATTRIBUTE_vision_radious))
+            return hitInfo.transform.tag == "Player";
+        return false;
     }
 
     private void checkHealth()

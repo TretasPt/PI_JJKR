@@ -9,6 +9,7 @@ public class Pike : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("HELLO???");
         if (collision.gameObject.tag == "Player")
         {
             bog.setState(Bog.STATE_PERSUING);

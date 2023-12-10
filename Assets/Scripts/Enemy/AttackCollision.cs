@@ -10,6 +10,7 @@ public class AttackCollision : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("Attacked");
         if (collision.gameObject.tag == "Player")
         {
             Debug.Log("Attacked");

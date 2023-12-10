@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 45798551}
   m_Layer: 0
   m_Name: AttackCollider
-  m_TagString: Untagged
+  m_TagString: BogHand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -601,6 +601,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 442915745}
+--- !u!114 &442915750 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114790560494280721, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+  m_PrefabInstance: {fileID: 1420319577}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 442915744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0039b032d58032141afe326e3bcb6093, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &447159934
 GameObject:
   m_ObjectHideFlags: 0
@@ -1204,7 +1215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Floor: {fileID: 725304840}
-  MAX_PROPS: 5000
+  MAX_PROPS: 0
   MIN_CLUSTERS: 10
   MAX_CLUSTERS: 10
   TREE_RATIO: 0.4
@@ -1328,6 +1339,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 45798550}
     - target: {fileID: 114790560494280721, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: ATTRIBUTE_health
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114790560494280721, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: PREFAB_pikePrefab
+      value: 
+      objectReference: {fileID: 2175139427525911916, guid: bf1ddebfac153dd4b8a3f2a05d831653, type: 3}
+    - target: {fileID: 114790560494280721, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
       propertyPath: ATTRIBUTE_run_speed
       value: 4
       objectReference: {fileID: 0}
@@ -1437,6 +1456,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9064174803885867141, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
       propertyPath: m_Name
+      value: Bog
+      objectReference: {fileID: 0}
+    - target: {fileID: 9064174803885867141, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: m_TagString
       value: Bog
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1994,6 +2017,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 879215bbaa96fd949abef7644ecfe14d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bog: {fileID: 442915750}
   playerVelocity: {x: 0, y: 0, z: 0}
   airMovement: 1
   speed: 3
@@ -2054,9 +2078,9 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 126
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &2121204594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2128,11 +2152,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4833086131863148717, guid: 7468d3994305c9a4aacfbfc648a54310, type: 3}
       propertyPath: m_Height
-      value: 5
+      value: 2.22
       objectReference: {fileID: 0}
     - target: {fileID: 4833086131863148717, guid: 7468d3994305c9a4aacfbfc648a54310, type: 3}
       propertyPath: m_Center.y
-      value: 1.45
+      value: 0.08
       objectReference: {fileID: 0}
     - target: {fileID: 5267716326890399234, guid: 7468d3994305c9a4aacfbfc648a54310, type: 3}
       propertyPath: m_ClearFlags
@@ -2148,7 +2172,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8035899489430576595, guid: 7468d3994305c9a4aacfbfc648a54310, type: 3}
       propertyPath: m_Height
-      value: 5
+      value: 2.15
       objectReference: {fileID: 0}
     - target: {fileID: 8035899489430576595, guid: 7468d3994305c9a4aacfbfc648a54310, type: 3}
       propertyPath: m_Enabled
@@ -2156,7 +2180,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8035899489430576595, guid: 7468d3994305c9a4aacfbfc648a54310, type: 3}
       propertyPath: m_Center.y
-      value: 1.45
+      value: 0.06
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
