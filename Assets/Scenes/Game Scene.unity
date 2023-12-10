@@ -1215,8 +1215,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Floor: {fileID: 725304840}
-  MAX_PROPS: 0
-  MIN_CLUSTERS: 10
+  MAX_PROPS: 5000
+  MIN_CLUSTERS: 40
   MAX_CLUSTERS: 10
   TREE_RATIO: 0.4
 --- !u!4 &1051686660 stripped
@@ -1339,6 +1339,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 45798550}
     - target: {fileID: 114790560494280721, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114790560494280721, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
       propertyPath: ATTRIBUTE_health
       value: 2
       objectReference: {fileID: 0}
@@ -1372,7 +1376,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114790560494280721, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
       propertyPath: COOLDOWN_empty_search_end
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114790560494280721, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
       propertyPath: ATTRIBUTE_pike_spawn_distance
@@ -1387,12 +1391,16 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114790560494280721, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
+      propertyPath: ATTRIBUTE_maximum_pike_spawn_pivot_angle
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 114790560494280721, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
       propertyPath: ATTRIBUTE_maximum_number_of_pike_clusters
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114790560494280721, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
       propertyPath: ATTRIBUTE_maximum_empty_search_pivot_angle
-      value: 90
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 3430849496339963259, guid: cb525dc9519d33c4499a8028667d5f22, type: 3}
       propertyPath: m_ApplyRootMotion

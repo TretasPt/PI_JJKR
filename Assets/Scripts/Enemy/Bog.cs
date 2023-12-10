@@ -83,8 +83,7 @@ public class Bog : MonoBehaviour
 
         if (state != STATE_PERSUING && visible)
         {
-            Debug.Log("Is visible? -> " + visible);//-------------------------------------------------------------------------------------
-            setState(STATE_PERSUING);                           //Aqui está o problema!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            setState(STATE_PERSUING);
         }
         else if (state == STATE_PERSUING && !visible)
             setState(STATE_EMPTY_SEARCH);
@@ -112,7 +111,6 @@ public class Bog : MonoBehaviour
     {
         if ((target.transform.position - transform.position).magnitude < 7)
         {
-            Debug.Log("Attackingggg");
             GetComponent<AnimationManager>().attack();
             hand.enabled = true;
         }
@@ -128,7 +126,6 @@ public class Bog : MonoBehaviour
     private bool targetVisible()
     {
         if (targetWithinVision() && targetInFront())
-            Debug.Log("Seen 2 !!!");//-------------------------------------------------------------------------------------
         targetVector = target.transform.position - transform.position;
         return targetWithinVision() && targetInFront();
     }

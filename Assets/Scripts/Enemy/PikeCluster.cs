@@ -81,9 +81,9 @@ public class PikeCluster : MonoBehaviour
 
     private void setRotation()
     {
-        float rotateX = UnityEngine.Random.Range(0,10);      //TODO
-        float rotateY = UnityEngine.Random.Range(-bog.ATTRIBUTE_maximum_pike_spawn_pivot_angle, bog.ATTRIBUTE_maximum_pike_spawn_pivot_angle);
-        float rotateZ = UnityEngine.Random.Range(-15,15);      //TODO
+        float rotateX = (float)RandomVariables.Uniform(0f,10f);
+        float rotateY = (float)RandomVariables.Arcsine(-bog.ATTRIBUTE_maximum_pike_spawn_pivot_angle, bog.ATTRIBUTE_maximum_pike_spawn_pivot_angle);
+        float rotateZ = (float)RandomVariables.Uniform(-15f, 15f);
         float rotationToTarget = spawnRotation.y + Vector3.SignedAngle(Vector3.forward, target.transform.position - spawnPosition, Vector3.up);
         spawnRotation = Quaternion.Euler(0,rotationToTarget + rotateY,0);
         individualRotation = Quaternion.Euler(rotateX, rotationToTarget + rotateY, rotateZ);

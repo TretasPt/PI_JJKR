@@ -50,8 +50,8 @@ public class EmptySearchState : State
 
     private void setNextDirection()
     {
-        maxAngleToDestination *= 0.9f;                                                                        //TODO nao hardcoded
-        float angleToDestination = UnityEngine.Random.Range(-maxAngleToDestination, maxAngleToDestination);             // TODO VA
+        maxAngleToDestination *= 0.9f;
+        float angleToDestination = (float)RandomVariables.NormalBounded(0, maxAngleToDestination, -maxAngleToDestination, maxAngleToDestination+20);
         Vector3 vectorToDestination = Quaternion.Euler(0, angleToDestination, 0) * bog.transform.forward;
         vectorToDestination = vectorToDestination * 2;
         bog.setDestinationVector(vectorToDestination);
