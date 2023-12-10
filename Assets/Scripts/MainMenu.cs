@@ -6,9 +6,13 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
+
 
 public class MainMenu : MonoBehaviour
 {
+    private static AudioSource audioSource;
+    private static List<String> AudioClipsList = new List<String> {"2021_HSV1_Cave_of_Agony", "2021_HSV1_Darvaza's_Awakening", "2021_HSV1_Dolls_of_Nagoro", "2021_HSV1_The_Haunted_Docks", "2021_HSV1_Tomb_of_the_Forgotten"};
 
     public static GameObject menuGameObject;
     public static GameObject musicSubMenuGameObject;
@@ -18,7 +22,7 @@ public class MainMenu : MonoBehaviour
     public static GameObject xSensitivityText;
     public static GameObject ySensitivityText;
     
-    public static bool optionsMenuState = false;
+    public static bool optionsMenuState = true;
     public static bool musicSubMenuState = false;
     public static bool controlsSubMenuState = false;
 
@@ -28,7 +32,7 @@ public class MainMenu : MonoBehaviour
     private void Start()
     {
         //Assignment of the gameObjects for the static functions later.
-        menuGameObject = GameObject.Find("Main Menu");
+        menuGameObject = transform.gameObject;
         musicSubMenuGameObject = menuGameObject.transform.GetChild(4).gameObject;
         controlsSubMenuGameObject = menuGameObject.transform.GetChild(5).gameObject;
         
@@ -36,23 +40,36 @@ public class MainMenu : MonoBehaviour
 
         xSensitivityText = controlsSubMenuGameObject.transform.GetChild(0).GetChild(0).gameObject;
         ySensitivityText = controlsSubMenuGameObject.transform.GetChild(5).GetChild(0).gameObject;
+        
+
         updateSensibilityText();
         //Making Menus and SubMenus disappear
         //controlsSubMenuGameObject.SetActive(controlsSubMenuState);
         
+        initMusic();
+        updateMenu(musicSlider);
         SwitchControlsSubMenu();
         SwitchOptionsMenu();
-        SwitchMusicSubMenu(); 
+        SwitchMusicSubMenu();
+    }
+
+    public static void initMusic()
+    {
+        audioSource = menuGameObject.transform.parent.GetComponent<AudioSource>();
+        audioSource.clip = getRandomMusic(); //sets audioSource's clip to a random music inside the resources folder
+        //Debug.Log("audioClip: " + audioSource.clip);
+        audioSource.loop = true;
+        audioSource.Play();
     }
 
     public void StartGame()
     {
         SceneManager.LoadSceneAsync(1); //Game is Index 1 in build
-
+        
 
         GameMenu.optionsMenuState = true;
-        GameMenu.controlsSubMenuState = true;
-        GameMenu.musicSubMenuState = true;
+        GameMenu.controlsSubMenuState = false;
+        GameMenu.musicSubMenuState = false;
         GameMenu.updateMenu(musicSlider);
         GameMenu.SwitchMusicSubMenu();
         GameMenu.SwitchControlsSubMenu();
@@ -104,17 +121,20 @@ public class MainMenu : MonoBehaviour
     {
         musicSlider++;
         musicText.GetComponent<TextMeshProUGUI>().text = musicSlider + "";
+        audioSource.volume += 1/20f;
     }
 
     public static void decreaseVolume()
     {
         musicSlider--;
         musicText.GetComponent<TextMeshProUGUI>().text = musicSlider + "";
+        audioSource.volume -= 1/20f;
     }
     
     public static void updateMenu(float music)
     {
         musicSlider = music;
+        audioSource.volume = musicSlider / 20f;
         //musicText.GetComponent<TextMeshProUGUI>().text = musicSlider + "";
     }
     
@@ -141,6 +161,11 @@ public class MainMenu : MonoBehaviour
         mouseSensitivity2D.y--;
         ySensitivityText.GetComponent<TextMeshProUGUI>().text = mouseSensitivity2D.y + " - ySensibility";
         PlayerLook.setSensitivity2D(mouseSensitivity2D);
+    }
+
+    public static AudioClip getRandomMusic()
+    {
+        return Resources.Load<AudioClip>("Music/" + AudioClipsList[Random.Range(0, AudioClipsList.Count)]);
     }
 
 }
