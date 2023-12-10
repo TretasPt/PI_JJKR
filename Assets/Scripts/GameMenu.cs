@@ -10,6 +10,9 @@ using UnityEngine.UIElements;
 
 public class GameMenu : MonoBehaviour
 {
+    private static List<String> AudioClipsList = new List<String> {"2021_HSV1_Cave_of_Agony", "2021_HSV1_Darvaza's_Awakening", "2021_HSV1_Dolls_of_Nagoro", "2021_HSV1_The_Haunted_Docks", "2021_HSV1_Tomb_of_the_Forgotten"};
+    private static AudioSource audioSource;
+    
     public static GameObject menuGameObject;
     public static GameObject musicSubMenuGameObject;
     public static GameObject musicText;
@@ -19,8 +22,8 @@ public class GameMenu : MonoBehaviour
     public static GameObject ySensitivityText;
     
     public static bool optionsMenuState = true;
-    public static bool musicSubMenuState = true;
-    public static bool controlsSubMenuState = true;
+    public static bool musicSubMenuState = false;
+    public static bool controlsSubMenuState = false;
 
     private Vector2 mouseSensitivity2D;
     private static float musicSlider;
@@ -36,19 +39,34 @@ public class GameMenu : MonoBehaviour
         xSensitivityText = controlsSubMenuGameObject.transform.GetChild(2).GetChild(0).gameObject;
         ySensitivityText = controlsSubMenuGameObject.transform.GetChild(5).GetChild(0).gameObject;
         
+        audioSource = transform.parent.GetComponent<AudioSource>();
+        
         updateSensibilityText();
         SwitchMusicSubMenu();
         SwitchControlsSubMenu();
         switchGameMenu();
+        initMusic();
+    }
+    
+    public static void initMusic()
+    {
+        audioSource.clip = MainMenu.getRandomMusic(); //sets audioSource's clip to a random music inside the resources folder
+        //Debug.Log("audioClip: " + audioSource.clip);
+        audioSource.loop = true;
+        audioSource.Play();
     }
     
     public static void goToMainMenu()
     {
-        switchGameMenu();
-        PlayerMotor.UnlockCursor();
-        //MainMenu.SwitchOptionsMenu();
-        MainMenu.updateMenu(musicSlider);
+        //switchGameMenu();
         SceneManager.LoadSceneAsync(0);
+        PlayerMotor.UnlockCursor();
+        
+        //MainMenu.initMusic();
+        MainMenu.updateMenu(musicSlider);
+        
+        MainMenu.optionsMenuState = true;
+        MainMenu.SwitchOptionsMenu();
     }
 
     public static void switchGameMenu()
@@ -72,11 +90,10 @@ public class GameMenu : MonoBehaviour
     {
         if (controlsSubMenuState)
         {
-            musicSubMenuState = !musicSubMenuState; //Inverts current musicSubMenuState bool value;
-            controlsSubMenuGameObject.SetActive(!controlsSubMenuState);
+            SwitchControlsSubMenu();
         }
         musicSubMenuState = !musicSubMenuState; //Inverts current musicSubMenuState bool value;
-        musicSubMenuGameObject.SetActive(musicSubMenuState); 
+        musicSubMenuGameObject.SetActive(musicSubMenuState);
         musicText.GetComponent<TextMeshProUGUI>().text = musicSlider + "";
     }
 
@@ -84,10 +101,9 @@ public class GameMenu : MonoBehaviour
     {
         if (musicSubMenuState)
         {
-            controlsSubMenuState = !controlsSubMenuState;
-            musicSubMenuGameObject.SetActive(!musicSubMenuState); 
+            SwitchMusicSubMenu();
         }
-        controlsSubMenuState = !controlsSubMenuState;
+        controlsSubMenuState = !controlsSubMenuState; //Inverts current controlsSubMenuState bool value;
         controlsSubMenuGameObject.SetActive(controlsSubMenuState);
     }
     
@@ -95,17 +111,20 @@ public class GameMenu : MonoBehaviour
     {
         musicSlider++;
         musicText.GetComponent<TextMeshProUGUI>().text = musicSlider + "";
+        audioSource.volume += 1/20f;
     }
 
     public static void decreaseVolume()
     {
         musicSlider--;
         musicText.GetComponent<TextMeshProUGUI>().text = musicSlider + "";
+        audioSource.volume -= 1/20f;
     }
 
     public static void updateMenu(float music)
     {
         musicSlider = music;
+        audioSource.volume = musicSlider / 20f;
         musicText.GetComponent<TextMeshProUGUI>().text = musicSlider + "";
     }
 
