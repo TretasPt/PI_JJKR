@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -115,5 +117,89 @@ public class RandomVariables : MonoBehaviour
         }
         return sum;
     }
+
+
+    private class DistributionTesterStructure
+    {
+        public string Name { get; }
+        public Func<string> Generator { get; }
+        public int Iterations { get; }
+
+        public DistributionTesterStructure(string name, Func<string> generator, int iterations = 1000)
+        {
+            this.Name = name;
+            this.Generator = generator;
+            this.Iterations = iterations;
+        }
+
+    }
+
+    public static void TestDistributions()
+    {
+        Debug.Log("Started generating random variables to files.");
+
+
+        DistributionTesterStructure[] generators = {
+            // new("Test",()=>"0",5),
+            // new("uniformTest0",() => Uniform(0f, 2f).ToString(),10),
+
+            new("ChooseBushType", ()=>Uniform(0, 5).ToString()),
+            new("ChooseTreeType", ()=>Uniform(0, 10).ToString()),
+            new("ChoseXOrZToPositionCluster", ()=>Uniform(-256.5f, 256.5f).ToString()),
+            new("PolarPropAngle",()=>Uniform(0f, 2 * Mathf.PI).ToString()),
+            new("GenerateNumberOfClusters", ()=>Uniform(5, 20).ToString()),
+            new("GenerateClusterMean",()=>Uniform(5f, 50f).ToString()),
+            new("GenerateClusterStandardDeviation",()=>Uniform(1f, 50f).ToString()),
+            new("ChosePerlinNoiseOffset", ()=>Uniform(0f, 100000f).ToString()),
+            new("ResetPlayerPosition", ()=> NormalBounded(0,5,-10,10).ToString()),
+            new("RandomizeShoot",()=>Normal(0f, 0.015f).ToString())
+            
+            //new("PolarPropRadious", NormalBounded(mean, sDeviation, 0, 200).ToString()),
+
+
+        };
+
+
+        foreach (DistributionTesterStructure generator in generators)
+        {
+            using StreamWriter writer = new("./ThingsThatShouldBeOutside/" + generator.Name + ".csv");
+            for (int i = 0; i < generator.Iterations; i++)
+            {
+                writer.Write(generator.Generator() + ";");
+            }
+        }
+
+        Debug.Log("Finished generating random variables to files.");
+
+
+
+        // string[] s = { 3f.ToString(), 3f.ToString() };
+
+        // Func<string[]> sa = () => new string[] {};
+
+        // Func<string[]>[] funcs = {
+        //     () => 3f.ToString(),
+        //     () => Uniform(0f, 2f).ToString(),
+        //     () => Uniform(0f, 10f).ToString()
+        //     };
+
+        // foreach (var generator in funcs)
+        // {
+
+        //     // using (StreamWriter writer = new StreamWriter(fullPath))
+        //     // {
+        //     //     writer.WriteLine("Monica Rathbun");
+        //     //     writer.WriteLine("Vidya Agarwal");
+        //     //     writer.WriteLine("Mahesh Chand");
+        //     //     writer.WriteLine("Vijay Anand");
+        //     //     writer.WriteLine("Jignesh Trivedi");
+        //     // }
+        // }
+
+    }
+
+    // public void Start(){
+    //     testDistributions();
+    // }
 
 }
