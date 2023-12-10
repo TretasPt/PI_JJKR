@@ -38,4 +38,10 @@ public class PlayerLook : MonoBehaviour
         return new Vector2(xSensitivity, ySensitivity);
     }
 
+    public static void setSensitivity2D(Vector2 sensitivity2D)
+    {
+        xSensitivity = sensitivity2D.x;
+        ySensitivity = sensitivity2D.y;
+    }
+
 }
