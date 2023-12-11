@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Tree
   - Bush
+  - Floor
+  - Bog
+  - BogHand
+  - Pike
   layers:
   - Default
   - TransparentFX

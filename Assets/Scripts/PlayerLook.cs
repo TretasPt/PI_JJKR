@@ -22,8 +22,7 @@ public class PlayerLook : MonoBehaviour
 
         cam.transform.localRotation = Quaternion.Euler(yRotation, 0, 0);
 
-        transform.Rotate(Vector3.up * mouseX * Time.deltaTime * xSensitivity);
-
+        transform.Rotate(Vector3.up * (mouseX * Time.deltaTime) * xSensitivity);
     }
 
     public void FlashlightToggle()

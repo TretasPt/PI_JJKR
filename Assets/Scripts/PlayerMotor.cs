@@ -4,12 +4,16 @@ using System.Collections.Specialized;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.PlasticSCM.Editor.WebApi;
+using UnityEngine.EventSystems;
 
 public class PlayerMotor : MonoBehaviour
 {
     [HideInInspector]
     public static Action shootInput;
     public static Action reloadInput;
+
+    public Bog bog;
 
     private CharacterController controller;
     [SerializeField] private Vector3 playerVelocity;
@@ -21,6 +25,8 @@ public class PlayerMotor : MonoBehaviour
     [SerializeField] public float airMovementScaling = 0.4f;
     [SerializeField] private KeyCode reloadKey;
     private bool isGrounded;
+
+    private bool lastMouseInput = false;
 
     public GameObject Floor;
 
@@ -104,11 +110,15 @@ public class PlayerMotor : MonoBehaviour
 
     public void ProcessShoot()
     {
+        bool mouseInput = Input.GetMouseButton(0);
+
         //Chekcs if left mouse button is being pressed
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && !lastMouseInput)
         {
             shootInput?.Invoke();
         }
+
+        lastMouseInput = mouseInput; 
 
         if (Input.GetKeyDown(reloadKey))
         {
@@ -128,19 +138,11 @@ public class PlayerMotor : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider collider)
     {
-        Debug.Log("Hit something T.");
-
+        if (collider.gameObject.tag == "BogHand")
+            GetComponent<PlayerStats>().applyDamage(5);
+        else if (collider.gameObject.tag == "Pike")
+            bog.setState(Bog.STATE_PERSUING);
     }
-    void OnCollisionEnter(Collision collision)
-    {
-        // ContactPoint contact = collision.contacts[0];
-        // Quaternion rotation = Quaternion.FromToRotation(Vector3.up, contact.normal);
-        // Vector3 position = contact.point;
-        // Instantiate(explosionPrefab, position, rotation);
-        // Destroy(gameObject);
-        Debug.Log("Hit something.");
-    }
-
 }
