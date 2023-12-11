@@ -861,6 +861,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bog_Final
       objectReference: {fileID: 0}
+    - target: {fileID: 5792692386752641769, guid: 616e9bd0d3e25ff40bb2b73224aabd53, type: 3}
+      propertyPath: ATTRIBUTE_run_speed
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5792692386752641769, guid: 616e9bd0d3e25ff40bb2b73224aabd53, type: 3}
+      propertyPath: ATTRIBUTE_walk_speed
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6033,6 +6041,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 725304840}
     - target: {fileID: 3243382487450450012, guid: 745facf73ce43994989f8f8a0e2118ac, type: 3}
+      propertyPath: speed
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3243382487450450012, guid: 745facf73ce43994989f8f8a0e2118ac, type: 3}
       propertyPath: reloadKey
       value: 114
       objectReference: {fileID: 0}
@@ -6044,6 +6056,10 @@ PrefabInstance:
       propertyPath: m_Intensity
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4435444794981399862, guid: 745facf73ce43994989f8f8a0e2118ac, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 371c77d8afca6bf40ad50ebb036c6418, type: 2}
     - target: {fileID: 6693333663920820133, guid: 745facf73ce43994989f8f8a0e2118ac, type: 3}
       propertyPath: m_Constraints
       value: 126

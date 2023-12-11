@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.UIElements;
-using static UnityEditor.Progress;
+// using static UnityEditor.Progress;
 
 public class PikeCluster : MonoBehaviour
 {
@@ -127,8 +127,8 @@ public class PikeCluster : MonoBehaviour
 
     /*
     TODO 
-     - Associar ao parent que, por agora, é criado mas não está ainda como parent dos pikes
-     - Corrigir orientação do modelo dos pikes
+     - Associar ao parent que, por agora, ï¿½ criado mas nï¿½o estï¿½ ainda como parent dos pikes
+     - Corrigir orientaï¿½ï¿½o do modelo dos pikes
      - Fazer seguir o player
     */
 }
