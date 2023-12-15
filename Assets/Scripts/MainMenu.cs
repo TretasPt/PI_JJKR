@@ -31,6 +31,8 @@ public class MainMenu : MonoBehaviour
 
     private void Start()
     {
+        PlayerMotor.UnlockCursor();
+
         //Assignment of the gameObjects for the static functions later.
         menuGameObject = transform.gameObject;
         musicSubMenuGameObject = menuGameObject.transform.GetChild(4).gameObject;
