@@ -12,6 +12,7 @@ public class PlayerStats : MonoBehaviour
     {
         if (health < 1)
             SceneManager.LoadSceneAsync(0); //Index 0 in build
+            PlayerMotor.UnlockCursor();
     }
 
     public void applyDamage(int damage)
