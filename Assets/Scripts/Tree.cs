@@ -49,5 +49,9 @@ public class Tree : MonoBehaviour
             fallingDirection.y = 0;
             fall(fallingDirection);
         }
+        else if (collider.gameObject.tag == "Player")
+        {
+            Debug.Log("Tree Colision");
+        }
     }
 }

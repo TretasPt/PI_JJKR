@@ -34,6 +34,7 @@ public class Gun : MonoBehaviour
         //Can Shoot
         if (CanShoot())
         {
+            GetComponent<AudioSource>().Play();
             Vector3 randomizedDirecition = ShootingTarget();
             Vector3 origin = gun.transform.position + Quaternion.Euler(0,180,0)*(gun.transform.forward.normalized * 0.1f);
             //controller.detectCollisions = false;

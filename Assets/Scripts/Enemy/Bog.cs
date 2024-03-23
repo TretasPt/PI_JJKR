@@ -58,6 +58,8 @@ public class Bog : MonoBehaviour
 
     private int health;
 
+    private Cooldown playAudio;
+
     void Awake()
     {
         health = ATTRIBUTE_health;
@@ -71,11 +73,20 @@ public class Bog : MonoBehaviour
         };
         setState(STATE_EMPTY_SEARCH);
 
+        playAudio = new Cooldown(7);
     }
 
     void Update()
     {
         states[state].update();
+        playAudio.count();
+        if (playAudio.done())
+        {
+            AudioSource[] audioSources = GetComponents<AudioSource>();
+            for (int i = 0; i < audioSources.Length; i++)
+                audioSources[UnityEngine.Random.Range(0, audioSources.Length)].Play();
+            playAudio.setStart();
+        }
     }
 
     //Actions

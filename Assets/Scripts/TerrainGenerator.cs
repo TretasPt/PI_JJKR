@@ -10,7 +10,6 @@ public class TerrainGenerator : MonoBehaviour
 
     public float scale;
 
-
     public float offSetX;
     public float offSetY;
 
